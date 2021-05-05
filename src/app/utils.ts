@@ -1,5 +1,5 @@
 
-
+export const getProtectQLRoot = () => process.env.REACT_APP_HOST?.substr(0,process.env.REACT_APP_HOST?.length - 8)
 export const isEmailValid = (email: string) => {
     if(process.env.NODE_ENV === 'development') return true
 

@@ -25,7 +25,7 @@ import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
 export default function App() {
 
   return (
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
           <div>
               <Header />
             {/*

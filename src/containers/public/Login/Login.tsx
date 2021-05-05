@@ -5,6 +5,7 @@ import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
 import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { Modal, Form, Button, Alert } from 'react-bootstrap'
 import { isEmailValid } from './utils/utils';
+import { getProtectQLRoot } from '../../../app/utils';
 
 const LOGIN_QL = gql`
   mutation Login($email: String!, $pass: String!) {
@@ -129,10 +130,9 @@ export const Login: React.FC = () => {
 
                                 <ul className="list s3">
                                     <li>Or login with:</li>
-                                    <li><a href={`${process.env.REACT_APP_HOST}/auth/github`}>GitHub</a></li>
-                                    <li><a href={`${process.env.REACT_APP_HOST}/auth/facebook`}>Facebook</a></li>
-                                    <li><a href={`${process.env.REACT_APP_HOST}/auth/google`}>Google</a></li>
-                                   
+                                    <li><a href={`${getProtectQLRoot()}/auth/github`}>GitHub</a></li>
+                                    <li><a href={`${getProtectQLRoot()}/auth/facebook`}>Facebook</a></li>
+                                    <li><a href={`${getProtectQLRoot()}/auth/google`}>Google</a></li>
                                 </ul>
 
                             </div>

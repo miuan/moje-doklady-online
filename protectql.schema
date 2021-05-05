@@ -1,0 +1,54 @@
+type Organization @model {
+    id: ID! @isUnique
+    name: String!
+    street: String!
+    psc: String!
+    city: String!
+    country: String! @default("CZ")
+    
+    ico: String!
+    dic: String
+    
+    tel: String
+    www: String
+    
+# types: "normal" | "registred" | "platce"
+    type: String
+    
+    invoices: [Invoice] @relation(name: "InvoiceOnOrganization")
+    user: User! @relation(name: "OrganizationOnUser")
+}
+
+type Customer @model {
+    name: String!
+    street: String!
+    psc: String!
+    city: String!
+    country: String! @default("CZ")
+    
+    ico: String!
+    dic: String
+    
+    tel: String
+    www: String
+    
+    invoices: [Invoice] @relation(name: "InvoiceOnCustomer")
+    user: User! @relation(name: "CustomerOnUser")
+}
+
+
+type Invoice @model {
+    name: String!
+    
+    organization: Organization! @relation(name: "InvoiceOnOrganization")
+    customer: Customer! @relation(name: "InvoiceOnCustomer")
+    user: User! @relation(name: "InvoiceOnUser")
+}
+
+@create("public") 
+type User @model {
+
+  organizations: [Organization] @relation(name: "OrganizationOnUser")
+  customers: [Customer] @relation(name: "CustomerOnUser")
+  invoices: [Invoice] @relation(name: "InvoiceOnUser")
+}

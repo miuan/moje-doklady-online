@@ -4,9 +4,10 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import { User, USER_LOGIN, useUserDispatch } from '../../../../app/userContext'
 import _ from 'lodash'
 import { Alert } from 'react-bootstrap'
+import { getProtectQLRoot } from '../../../../app/utils'
 
 export const tokenFromFacebookCode = async (type:string, code: string) => {
-    return axios.get(`${process.env.REACT_APP_HOST}/auth/${type}/callback?code=${code}`)
+    return axios.get(`${getProtectQLRoot()}/auth/${type}/callback?code=${code}`)
 }
 
 export const GithubCallback: React.FC<{type: string}> = ({type}) => {
