@@ -20,6 +20,8 @@ import UserDashboard from "./containers/user/UserDashboard/UserDashboard";
 import ProtectRoute from "./components/ProtectRoute/ProtectRoute";
 import UsersList from "./containers/admin/Users/UsersList";
 import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
+import OrganizationList from "./containers/user/Organizations/List";
+import OrganizationEdit from "./containers/user/Organizations/Edit";
 
 
 export default function App() {
@@ -65,6 +67,12 @@ export default function App() {
               
               <ProtectRoute path="/user/dashboard">
                 <UserDashboard />
+              </ProtectRoute>
+              <ProtectRoute exact path="/user/organizations">
+                <OrganizationList />
+              </ProtectRoute>
+              <ProtectRoute path="/user/organizations/create">
+                <OrganizationEdit />
               </ProtectRoute>
               <Route path="/user/info">
                 {/* <UserInfo /> */}

@@ -1,3 +1,7 @@
+
+@all(filter:"user_every.id={{userId}}")
+@create("user") 
+@one("owner") @update("owner") @remove("owner")
 type Organization @model {
     id: ID! @isUnique
     name: String!
@@ -40,9 +44,19 @@ type Customer @model {
 type Invoice @model {
     name: String!
     
-    organization: Organization! @relation(name: "InvoiceOnOrganization")
-    customer: Customer! @relation(name: "InvoiceOnCustomer")
-    user: User! @relation(name: "InvoiceOnUser")
+    items: [InvoiceItem] @relation(name: "InvoiceItemOnInvoice")
+    organization: Organization @relation(name: "InvoiceOnOrganization")
+    customer: Customer @relation(name: "InvoiceOnCustomer")
+    user: User @relation(name: "InvoiceOnUser")
+}
+
+type InvoiceItem @model {
+    text: String!
+    price: Int
+    vat: Int
+
+    invoice: Invoice! @relation(name: "InvoiceItemOnInvoice")
+   # user: User! @relation(name: "InvoiceItemOnUser")
 }
 
 @create("public") 

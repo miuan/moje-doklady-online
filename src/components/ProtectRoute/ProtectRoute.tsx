@@ -2,7 +2,7 @@ import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { useUserState } from '../../app/userContext'
 
-export const ProtectRoute:React.FC<{path:string, role?:string}> = ({path, role, children}) => {
+export const ProtectRoute:React.FC<{path:string, role?:string, exact?:boolean}> = ({path, role, exact, children}) => {
     const user = useUserState()
 
     if(role && user.roles.indexOf(role) === -1){
