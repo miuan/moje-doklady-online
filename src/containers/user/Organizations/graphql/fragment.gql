@@ -1,0 +1,13 @@
+fragment OrganizationFragment on Organization {
+     id
+      name,
+      street,
+      psc,
+      city,
+      country,
+      ico,
+      dic
+      tel,
+      www,
+      type
+}

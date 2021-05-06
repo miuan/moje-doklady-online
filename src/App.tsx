@@ -71,9 +71,10 @@ export default function App() {
               <ProtectRoute exact path="/user/organizations">
                 <OrganizationList />
               </ProtectRoute>
-              <ProtectRoute path="/user/organizations/create">
+              <ProtectRoute exact path="/user/organizations/create">
                 <OrganizationEdit />
               </ProtectRoute>
+              <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
               <Route path="/user/info">
                 {/* <UserInfo /> */}
               </Route>

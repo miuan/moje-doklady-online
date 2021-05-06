@@ -13,7 +13,7 @@ const UserHeader = ({user, onLogout}:any) =>  ( <div className="header-light tra
     </Dropdown.Toggle>
 
     <Dropdown.Menu>
-      <Dropdown.Item href="/">Home</Dropdown.Item>
+      <Dropdown.Item href="/user/customers">Customers</Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>
   </div>
@@ -29,7 +29,8 @@ const UserHeader = ({user, onLogout}:any) =>  ( <div className="header-light tra
     </Dropdown.Toggle>
 
     <Dropdown.Menu>
-      <Dropdown.Item href="/"><Link to="/user/dashboard" >User Dashboard</Link></Dropdown.Item>
+      <Dropdown.Item href="/user/dashboard" >User Dashboard</Dropdown.Item>
+      <Dropdown.Item href="/user/organizations" >Organizations</Dropdown.Item>
       <Dropdown.Item href="/"><Link className="" to="/" onClick={onLogout}>Logout</Link></Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>

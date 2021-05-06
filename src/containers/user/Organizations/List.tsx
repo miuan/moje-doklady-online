@@ -8,7 +8,7 @@ const USER_LIST_QUERY = gql`
     allOrganizations(filter: $filter) {
       id
       name,
-      tel,
+      ico,
       www
     }}
 `;
@@ -38,7 +38,7 @@ export const OrganizationList: React.FC<{userId?: string, adminMode?: boolean}> 
         <div>
             <FilteredList 
                 name={'Organizations'}
-                fields={['name', 'tel', 'www']}
+                fields={['name', 'ico', 'www']}
                 userId={user.id} 
                 adminMode={adminMode}
                 queries={{USER_LIST_QUERY, ADMIN_LIST_QUERY, DELETE_MUTATION}} />

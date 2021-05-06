@@ -1,0 +1,39 @@
+mutation createOrganization(
+    $userId: ID!,
+    $name: String!,
+    $street: String!,
+    $psc: String!,
+    $city: String!,
+    $country: String!,
+    $ico: String!,
+    $dic: String,
+    $tel: String,
+    $www: String,
+    $type: String) {
+    createOrganization(
+      userId: $userId
+      name: $name,
+      street: $street,
+      psc: $psc,
+      city: $city,
+      country: $country,
+      ico: $ico,
+      dic: $dic,
+      tel: $tel,
+      www: $www,
+      type: $type
+      ) {
+      id
+      name,
+      street,
+      psc,
+      city,
+      country,
+      ico,
+      dic
+      tel,
+      www,
+      type
+      
+    }
+  }

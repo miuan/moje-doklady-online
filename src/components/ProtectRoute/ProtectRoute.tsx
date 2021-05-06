@@ -13,7 +13,7 @@ export const ProtectRoute:React.FC<{path:string, role?:string, exact?:boolean}> 
         return (<Redirect to={`/login?path=${path}`} />)
     }
 
-    return (<>{children}</>)
+    return (<Route path={path} exact={exact} children={children} />)
 }
 
 export default ProtectRoute
