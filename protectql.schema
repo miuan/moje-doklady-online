@@ -6,14 +6,14 @@ type Organization @model {
     id: ID! @isUnique
     name: String!
     street: String!
-    psc: String!
+    zip: String!
     city: String!
     country: String! @default("CZ")
     
     ico: String!
     dic: String
     
-    tel: String
+    phone: String
     www: String
     
 # types: "normal" | "registred" | "platce"
@@ -23,31 +23,36 @@ type Organization @model {
     user: User! @relation(name: "OrganizationOnUser")
 }
 
+@all(filter:"user_every.id={{userId}}")
+@create("user") 
+@one("owner") @update("owner") @remove("owner")
 type Customer @model {
     name: String!
     street: String!
-    psc: String!
+    zip: String!
     city: String!
     country: String! @default("CZ")
     
     ico: String!
     dic: String
     
-    tel: String
+    phone: String
     www: String
     
     invoices: [Invoice] @relation(name: "InvoiceOnCustomer")
     user: User! @relation(name: "CustomerOnUser")
 }
 
-
+@all(filter:"user_every.id={{userId}}")
+@create("user") 
+@one("owner") @update("owner") @remove("owner")
 type Invoice @model {
     name: String!
     
-    items: [InvoiceItem] @relation(name: "InvoiceItemOnInvoice")
-    organization: Organization @relation(name: "InvoiceOnOrganization")
-    customer: Customer @relation(name: "InvoiceOnCustomer")
-    user: User @relation(name: "InvoiceOnUser")
+    items: [InvoiceItem!]! @relation(name: "InvoiceItemOnInvoice")
+    organization: Organization! @relation(name: "InvoiceOnOrganization")
+    customer: Customer! @relation(name: "InvoiceOnCustomer")
+    user: User! @relation(name: "InvoiceOnUser")
 }
 
 type InvoiceItem @model {

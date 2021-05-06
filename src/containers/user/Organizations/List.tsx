@@ -2,48 +2,26 @@ import React, { useState, useEffect } from "react";
 import FilteredList from "../../../components/List/filtered-list";
 import gql from 'graphql-tag';
 import { useUserState } from "../../../app/userContext";
+import { loader } from "graphql.macro";
 
-const USER_LIST_QUERY = gql`
-  query allOrganizations($filter: OrganizationFilter){ 
-    allOrganizations(filter: $filter) {
-      id
-      name,
-      ico,
-      www
-    }}
-`;
+const USER_LIST_QUERY = loader('./graphql/all.gql')
+const DELETE_MUTATION = loader('./graphql/delete.gql')
+const ADMIN_LIST_QUERY = USER_LIST_QUERY
 
-const ADMIN_LIST_QUERY = gql`
-  query allUserRoles($filter: UserRoleFilter) {
-  allUserRoles(filter: $filter) {
-      id,
-      name
-    }
-  }
-`;
+export const FIELDS = ['name', 'ico', 'www']
 
-const DELETE_MUTATION = gql`
-  mutation deleteUserRole($id: ID!) {
-    deleteUserRole(id: $id) {
-      id
-    }
-  }
-`;
-
-
-export const OrganizationList: React.FC<{userId?: string, adminMode?: boolean}> = ({userId, adminMode=false}) => {
+export const OrganizationList: React.FC<{userId?: string, adminMode?: boolean, name?: string, fields: any}> = ({userId, adminMode=false, name, fields}) => {
   const user = useUserState()
-  
-    return (
-        <div>
-            <FilteredList 
-                name={'Organizations'}
-                fields={['name', 'ico', 'www']}
-                userId={user.id} 
-                adminMode={adminMode}
-                queries={{USER_LIST_QUERY, ADMIN_LIST_QUERY, DELETE_MUTATION}} />
-        </div>
-    )
+  return (
+      <div>
+          <FilteredList 
+              name={name || 'Organizations'}
+              fields={fields || FIELDS}
+              userId={user.id} 
+              adminMode={adminMode}
+              queries={{USER_LIST_QUERY, ADMIN_LIST_QUERY, DELETE_MUTATION}} />
+      </div>
+  )
 }
 
 export default OrganizationList

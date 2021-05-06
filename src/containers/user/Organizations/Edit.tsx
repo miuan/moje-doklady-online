@@ -12,13 +12,12 @@ const QUERY = loader('./graphql/query.gql');
 
 
 export const UserRoleEdit = () => {
-  let params = useParams() as any;
+  let {id} = useParams() as any;
   
-
   return (
     <>
       <BaseEdit 
-        id={params.id} 
+        id={id} 
         name={'Organization'}
         fields={['name','street','psc','city', 'country', 'ico','dic','tel','www']}
         query={{

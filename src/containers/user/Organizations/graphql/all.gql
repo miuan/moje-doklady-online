@@ -1,0 +1,9 @@
+  #import "./fragment.gql"
+  
+  query allOrganizations($filter: OrganizationFilter){ 
+    allOrganizations(filter: $filter) {
+      id
+      name,
+      ico,
+      www
+    }}
