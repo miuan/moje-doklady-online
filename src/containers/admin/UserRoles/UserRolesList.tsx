@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FilteredList from "../../../components/List/filtered-list";
+import FilteredList from "../../../components/List/FilteredList";
 import gql from 'graphql-tag';
 
 const USER_LIST_QUERY = gql`

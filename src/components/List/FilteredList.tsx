@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {Link, useHistory} from 'react-router-dom'
-import Table, {ITableQueries} from './table'
-import FilterItem from './filter-item'
+import Table, {ITableQueries} from './Table'
+import FilterItem from './FilteredItem'
 import {Navbar, Button} from 'react-bootstrap'
-import './filtered-list.css'
-import { IFilteredField } from './row-item'
+import './FilteredList.css'
+import { IFilteredField } from './RowItem'
 
 
 

@@ -1,0 +1,10 @@
+#import "./fragment.gql"
+
+mutation createCustomer($name: String!, $street: String!, $zip: String!, $city: String!, $country: String!, $ico: String!, $dic: String, $phone: String, $www: String, $invoicesIds: [ID!], $userId: ID!) {
+    createCustomer(
+      name: $name, street: $street, zip: $zip, city: $city, country: $country, ico: $ico, dic: $dic, phone: $phone, www: $www, invoicesIds: $invoicesIds, userId: $userId
+      ) {
+     ...CustomerFragment
+      
+    }
+  }

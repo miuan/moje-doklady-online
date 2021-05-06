@@ -22,6 +22,8 @@ import UsersList from "./containers/admin/Users/UsersList";
 import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
 import OrganizationList from "./containers/user/Organizations/List";
 import OrganizationEdit from "./containers/user/Organizations/Edit";
+import CustomerList from "./gen/Customer/List";
+import CustomerEdit from "./gen/Customer/Edit";
 
 
 export default function App() {
@@ -75,6 +77,16 @@ export default function App() {
                 <OrganizationEdit />
               </ProtectRoute>
               <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
+
+
+              <ProtectRoute exact path="/user/customers">
+                <CustomerList />
+              </ProtectRoute>
+              <ProtectRoute exact path="/user/customers/create">
+                <CustomerEdit />
+              </ProtectRoute>
+              <ProtectRoute path="/user/customers/:id" children={<CustomerEdit />} />
+
               <Route path="/user/info">
                 {/* <UserInfo /> */}
               </Route>

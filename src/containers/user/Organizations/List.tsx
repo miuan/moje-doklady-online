@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FilteredList from "../../../components/List/filtered-list";
+import FilteredList from "../../../components/List/FilteredList";
 import gql from 'graphql-tag';
 import { useUserState } from "../../../app/userContext";
 import { loader } from "graphql.macro";
@@ -10,7 +10,7 @@ const ADMIN_LIST_QUERY = USER_LIST_QUERY
 
 export const FIELDS = ['name', 'ico', 'www']
 
-export const OrganizationList: React.FC<{userId?: string, adminMode?: boolean, name?: string, fields: any}> = ({userId, adminMode=false, name, fields}) => {
+export const OrganizationList: React.FC<{userId?: string, adminMode?: boolean, name?: string, fields?: any}> = ({userId, adminMode=false, name, fields}) => {
   const user = useUserState()
   return (
       <div>

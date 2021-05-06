@@ -1,0 +1,5 @@
+#import "./fragment.gql"
+
+query customer($id:ID){ Customer(id:$id) {
+      ...CustomerFragment
+    }}

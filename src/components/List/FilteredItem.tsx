@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import { Col, Form, Alert, Button, InputGroup, DropdownButton, Dropdown } from "react-bootstrap";
-import './filter-item.css'
+import './FilteredItem.css'
 
 const basicOptionsName = {
     contains : 'contains',
@@ -24,7 +24,7 @@ export interface IFilterItemParam {
   
 
 export const FilterItem: React.FC<IFilterItemParam> = ({fields, onChange}) => {
-    const [fieldSelected, setFieldSelected] = useState(fields[0])
+    const [fieldSelected, setFieldSelected] = useState(fields[0].title || fields[0].name || fields[0])
     const [optionSelected, setOptionSelected] = useState('contains')
     const [filterText, setFilterText] = useState('')
     const [filter, setFilter] = useState<string|null>('null')
@@ -89,7 +89,7 @@ export const FilterItem: React.FC<IFilterItemParam> = ({fields, onChange}) => {
                 variant="success"
                 title={fieldSelected}
                 id="input-group-dropdown-0" >
-                    {fields.map((o)=> (<Dropdown.Item key={o} onClick={gc(o)}>{o.toString()}</Dropdown.Item>))}
+                    {fields.map((o)=> (<Dropdown.Item key={o} onClick={gc(o)}>{fields[0].title || fields[0].name || fields[0]}</Dropdown.Item>))}
             </DropdownButton>
             <DropdownButton
                 className="select-option"

@@ -3,12 +3,12 @@ import {Link} from 'react-router-dom'
 import { Table as BTable, Button } from 'react-bootstrap'
 
 import { useQuery, useMutation } from '@apollo/client';
-import { ListRow } from './row';
+import { ListRow } from './Row';
 import Loading from '../common/Loading';
 import DeleteModal from '../common/DeleteModal';
 import Unauthorized from '../common/Unauthorized';
 import { DocumentNode } from 'graphql';
-import { IFilteredField } from './row-item';
+import { IFilteredField } from './RowItem';
 
 export interface IFilterWithParams {
   filter?: string

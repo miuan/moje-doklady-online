@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from 'react-bootstrap'
-import './row.css'
-import { ListRowItem, IFilteredField } from "./row-item";
+import './Row.css'
+import { ListRowItem, IFilteredField } from "./RowItem";
 
 export interface IListRowItem {
   id: string;

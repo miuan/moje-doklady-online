@@ -24,7 +24,6 @@ export const BaseForm: React.FC<TBaseForm> = ({ model, fields, doUpdate, edit = 
     <div>
       <Form>
         {fields.map((field:any)=>(<BaseControl model={model} field={field} onChange={onChange}/>))}
-        <Button onClick={onUpdate}>{edit ? 'Update' : 'Create'}</Button>
       </Form>
     </div>
   );

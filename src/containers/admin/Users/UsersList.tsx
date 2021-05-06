@@ -1,7 +1,7 @@
 import React from "react";
 import gql from 'graphql-tag';
-import FilteredList from "../../../components/List/filtered-list";
-import ConnectBase from "../../../components/List/connect-base";
+import FilteredList from "../../../components/List/FilteredList";
+import ConnectBase from "../../../components/List/ConnectBase";
 
 const USER_LIST_QUERY = gql`
   query allUsers($filter: UserFilter){ allUsers(filter: $filter) {
