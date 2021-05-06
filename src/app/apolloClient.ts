@@ -6,10 +6,11 @@ import { RetryLink } from "@apollo/client/link/retry";
 
 const retryLink = new RetryLink({
   attempts: (count, operation, error) => {
-    return true;
+    // TODO: Attept only if is network error
+    return false;
   },
   delay: (count, operation, error) => {
-    return count * 1000 * Math.random();
+    return count * 2000;
   },
 });
 
