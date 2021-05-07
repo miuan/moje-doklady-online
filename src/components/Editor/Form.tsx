@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
+import { useForm, FormProvider } from "react-hook-form";
 
 import BaseControl, { TField } from './Control'
 
@@ -11,20 +12,21 @@ export type TBaseForm = {
 }
 
 export const BaseForm: React.FC<TBaseForm> = ({ model, fields, doUpdate, edit = false }) => {
+  const methods = useForm();
+
+  useEffect(()=>{
+    for(const field of fields as any){
+      const name = field.name || field
+      methods.setValue(name, model[name])
+    } 
+  }, [model])
   
-  const onUpdate = () => {
-      doUpdate(model)
-  }
-
-  const onChange = (field:string, value:any) => {
-    model[field] = value
-  }
-
   return (
-    <div>
-      <Form>
-        {fields.map((field:any)=>(<BaseControl model={model} field={field} onChange={onChange}/>))}
+    <FormProvider {...methods} >
+      <Form onSubmit={methods.handleSubmit(doUpdate)}>
+        {fields.map((field:any)=>(<BaseControl model={model} field={field} />))}
+        <input type="submit" />
       </Form>
-    </div>
+    </FormProvider>
   );
 };

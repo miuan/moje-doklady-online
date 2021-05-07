@@ -1,8 +1,8 @@
 #import "./fragment.gql"
 
-mutation updateCustomer($name: String, $street: String, $zip: String, $city: String, $country: String, $ico: String, $dic: String, $phone: String, $www: String, $id: ID, $invoicesIds: [ID!], $invoices: [CustomerinvoicesInvoice!]) {
+mutation updateCustomer($id: ID!, $name: String, $street: String, $zip: String, $city: String, $country: String, $ico: String, $dic: String, $phone: String, $www: String, $invoicesIds: [ID!], $invoices: [CustomerinvoicesInvoice!]) {
     updateCustomer(
-      name: $name, street: $street, zip: $zip, city: $city, country: $country, ico: $ico, dic: $dic, phone: $phone, www: $www, id: $id, invoicesIds: $invoicesIds, invoices: $invoices
+      id: $id, name: $name, street: $street, zip: $zip, city: $city, country: $country, ico: $ico, dic: $dic, phone: $phone, www: $www, invoicesIds: $invoicesIds, invoices: $invoices
       ) {
      ...CustomerFragment
       

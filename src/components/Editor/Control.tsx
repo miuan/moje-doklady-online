@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, FormControl, Button } from "react-bootstrap";
+import { useFormContext } from "react-hook-form";
 
 export type TControl = {
   placeholder? : string
@@ -13,52 +14,47 @@ export type TControlField = {
   placeholder?: string
   control?: React.FC<TControl>
   valid?: string
+  required?: boolean
 }
 
 export type TField = string | TControlField
 
 export interface IBaseControl {
-  model: any;
-  onChange: (name: string, value:any) => void;
+  model: any
   edit?: boolean
   field: TField
 }
 
-export const BaseControl: React.FC<IBaseControl> = ({ model, field, onChange, edit = false }) => {
+export const BaseControl: React.FC<IBaseControl> = ({ model, field}) => {
+  const { register, formState: {errors, touchedFields} } = useFormContext()
+
   const name = (field as TControlField).name ? (field as TControlField).name : field as string
   const label = (field as TControlField).label ? (field as TControlField).label : name
   const control = (field as TControlField).control ? (field as TControlField).control : null
   const placeholder = (field as TControlField).placeholder ? (field as TControlField).placeholder : ''
-
-  const [value, setValue] = useState(model[name]);
-
-  useEffect(()=>{
-    setValue(model[name])
-  }, [field, model])
-
-  const onUpdate = (value:string) => {
-    const obj = {...model} as any
-    obj[name] = value
-
-    setValue(value)
-    onChange(name, value)
-  }
+  const required = (field as TControlField).required ? true : false
+  const error = (errors && errors[name])
+  const touched = touchedFields && touchedFields[name]
 
   return (
-    <Form.Group controlId="formBasicEmail">
+    <Form.Group controlId={`form-${name}`}>
           <Form.Label>{label}</Form.Label>
-          {control ? 
-            control({onChange:(env: any) => onUpdate(env.target.value), value, placeholder}) :
-            <Form.Control
+          <Form.Control
+            defaultValue={model[name]}
               type="text"
               placeholder={placeholder}
-              onChange={(env: any) => onUpdate(env.target.value)}
-              value={value}
+              {...register(name as any, {required})}
+              
+              isInvalid={error}
+              isValid={touched && !error}
             />
-          }
+          
           <FormControl.Feedback type="valid">
-            Yeah you did it!
+            Perfect!
           </FormControl.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid {label}.
+          </Form.Control.Feedback>
         </Form.Group>
   );
 };

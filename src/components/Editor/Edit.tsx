@@ -41,10 +41,7 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
   // we consider is it a object defined tabs 
   const haveTabs = Object.keys(fields).some((k)=>isNaN(+k))
 
-  const [model, setModel] = useState({
-    name: "Project A",
-    models: ''
-  });
+  const [model, setModel] = useState({});
 
   const handleError = (incommingError:{message: string}) => {
     let incomingErrors = incommingError.message.split('\n')
@@ -134,20 +131,20 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
     }
   );
 
-  const onUpdate = useCallback(() => {
-    console.log('onUpdate >>> ', localId, model)
+  const onUpdate = useCallback((data) => {
+    console.log('onUpdate >>> ', localId, data)
     if(localId){
         updateProjectMutation({
             variables: {
               id:localId,
-              ...model
+              ...data
             }
           });
     } else {
         createProjectMutation({
             variables: {
               userId: localStorage.getItem("user.id"),
-              ...model
+              ...data
             }
           });
     }
@@ -164,7 +161,7 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
 
   return (
     <div style={{margin:'15px'}}>
-      {externId ? <h3>{name} Edit ({externId}) <Button onClick={onUpdate}>{externId ? 'Update' : 'Create'}</Button></h3> : <h3>{name} create <Button onClick={onUpdate}>{externId ? 'Update' : 'Create'}</Button></h3>}
+      {externId ? <h3>{name} Edit ({externId}) </h3> : <h3>{name} create </h3>}
       {error && <Alert variant={'danger'}>`${error.message}`</Alert>}
       {errors && errors.length > 0 && errors.map((e)=>(<Alert variant={'danger'}>{e}</Alert>))}
       {haveTabs ? <EditTabs fields={fields as TTabFields} model={model} doUpdate={onUpdate} edit={Boolean(localId)} /> : <BaseForm model={model} doUpdate={onUpdate} edit={Boolean(localId)} fields={fields as TField[]} />}
