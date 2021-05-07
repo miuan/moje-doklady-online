@@ -31,6 +31,7 @@ const UserHeader = ({user, onLogout}:any) =>  ( <div className="header-light tra
     <Dropdown.Menu>
       <Dropdown.Item href="/user/dashboard" >User Dashboard</Dropdown.Item>
       <Dropdown.Item href="/user/organizations" >Organizations</Dropdown.Item>
+      <Dropdown.Item href="/user/invoices" >Invoices</Dropdown.Item>
       <Dropdown.Item href="/"><Link className="" to="/" onClick={onLogout}>Logout</Link></Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>

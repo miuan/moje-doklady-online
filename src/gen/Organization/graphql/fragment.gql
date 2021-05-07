@@ -1,0 +1,15 @@
+fragment OrganizationFragment on Organization {
+    id,
+name,
+street,
+zip,
+city,
+country,
+ico,
+dic,
+phone,
+www,
+type,
+invoices{id},
+user{id}
+}

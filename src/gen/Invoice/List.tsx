@@ -10,18 +10,10 @@ export const USER_LIST_QUERY = loader('./graphql/all.gql')
 export const DELETE_MUTATION = loader('./graphql/delete.gql')
 export const ADMIN_LIST_QUERY = USER_LIST_QUERY
 
-export const FIELDS = [{name: 'name', title:'Name'},
-{name: 'street', title:'Street'},
-{name: 'zip', title:'Zip'},
-{name: 'city', title:'City'},
-{name: 'country', title:'Country'},
-{name: 'ico', title:'Ico'},
-{name: 'dic', title:'Dic'},
-{name: 'phone', title:'Phone'},
-{name: 'www', title:'Www'}]
+export const FIELDS = [{name: 'name', title:'Name'}]
 
 
-export type CustomerListType = {
+export type InvoiceListType = {
   adminMode?: boolean, 
   name?: string, 
   fields?: any
@@ -30,12 +22,12 @@ export type CustomerListType = {
   deleteMutation?: any
 }
 
-export const CustomerList: React.FC<CustomerListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
+export const InvoiceList: React.FC<InvoiceListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
   const user = useUserState()
   return (
-    <div className={`filtered-list-Customer filtered-list`}>
+    <div className={`filtered-list-Invoice filtered-list`}>
       <FilteredList 
-              name={name || 'Customers'}
+              name={name || 'Invoices'}
               fields={fields || FIELDS}
               userId={user?.id} 
               adminMode={adminMode}
@@ -47,4 +39,4 @@ export const CustomerList: React.FC<CustomerListType> = ({adminMode=false, name,
   )
 }
 
-export default CustomerList
+export default InvoiceList

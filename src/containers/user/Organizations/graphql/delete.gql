@@ -1,5 +1,0 @@
-  mutation deleteUserRole($id: ID!) {
-    deleteUserRole(id: $id) {
-      id
-    }
-  }

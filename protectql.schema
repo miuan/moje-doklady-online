@@ -27,14 +27,14 @@ type Organization @model {
 @create("user") 
 @one("owner") @update("owner") @remove("owner")
 type Customer @model {
-    name: String!
-    street: String!
-    zip: String!
-    city: String!
+    name: String! @placeholder("Jejich Firma s.r.o")
+    street: String! @placeholder("Willsonova")
+    zip: String! @regExp("[0-9](5)") @placeholder("12345")
+    city: String! @placeholder("Praha 2")
     country: String! @default("CZ")
     
-    ico: String!
-    dic: String
+    ico: String! @regExp("[0-9](8)")
+    dic: String @regExp("CZ[0-9](8)")
     
     phone: String
     www: String

@@ -10,18 +10,19 @@ export const UPDATE_MUTATION = loader('./graphql/update.gql')
 export const ONE_QUERY = loader('./graphql/one.gql');
 
 export const FIELDS = [
-	{name: 'name', label:'Name', placeholder: 'Jejich Firma s.r.o', required: true},
-	{name: 'street', label:'Street', placeholder: 'Willsonova', required: true},
-	{name: 'zip', label:'Zip', placeholder: '12345', regexp: '[0-9](5)', required: true},
-	{name: 'city', label:'City', placeholder: 'Praha 2', required: true},
+	{name: 'name', label:'Name', required: true},
+	{name: 'street', label:'Street', required: true},
+	{name: 'zip', label:'Zip', required: true},
+	{name: 'city', label:'City', required: true},
 	{name: 'country', label:'Country', required: true},
-	{name: 'ico', label:'Ico', regexp: '[0-9](8)', required: true},
-	{name: 'dic', label:'Dic', regexp: 'CZ[0-9](8)'},
+	{name: 'ico', label:'Ico', required: true},
+	{name: 'dic', label:'Dic'},
 	{name: 'phone', label:'Phone'},
-	{name: 'www', label:'Www'}
+	{name: 'www', label:'Www'},
+	{name: 'type', label:'Type'}
 ]
 
-export type CustomerEditType = {
+export type OrganizationEditType = {
     name?: string, 
     fields?: any
     createMutation?: any,
@@ -29,15 +30,15 @@ export type CustomerEditType = {
     oneQuery?: any
   }
 
-export const CustomerEdit:(obj:CustomerEditType)=>any = ({name, fields, createMutation, updateMutation, oneQuery }) => {
+export const OrganizationEdit:(obj:OrganizationEditType)=>any = ({name, fields, createMutation, updateMutation, oneQuery }) => {
   let params = useParams() as any;
   
   const id = params.id !== 'create' &&  params.id
 
-  return (<div className={`base-edit-Customer base-edit`}>
+  return (<div className={`base-edit-Organization base-edit`}>
       <BaseEdit 
         id={id} 
-        name={name || 'Customers'}
+        name={name || 'Organizations'}
         fields={fields || FIELDS}
         query={{
             CREATE_MUTATION: createMutation || CREATE_MUTATION,
@@ -49,4 +50,4 @@ export const CustomerEdit:(obj:CustomerEditType)=>any = ({name, fields, createMu
   );
 };
 
-export default CustomerEdit
+export default OrganizationEdit

@@ -18,10 +18,11 @@ export const FIELDS = [{name: 'name', title:'Name'},
 {name: 'ico', title:'Ico'},
 {name: 'dic', title:'Dic'},
 {name: 'phone', title:'Phone'},
-{name: 'www', title:'Www'}]
+{name: 'www', title:'Www'},
+{name: 'type', title:'Type'}]
 
 
-export type CustomerListType = {
+export type OrganizationListType = {
   adminMode?: boolean, 
   name?: string, 
   fields?: any
@@ -30,12 +31,12 @@ export type CustomerListType = {
   deleteMutation?: any
 }
 
-export const CustomerList: React.FC<CustomerListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
+export const OrganizationList: React.FC<OrganizationListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
   const user = useUserState()
   return (
-    <div className={`filtered-list-Customer filtered-list`}>
+    <div className={`filtered-list-Organization filtered-list`}>
       <FilteredList 
-              name={name || 'Customers'}
+              name={name || 'Organizations'}
               fields={fields || FIELDS}
               userId={user?.id} 
               adminMode={adminMode}
@@ -47,4 +48,4 @@ export const CustomerList: React.FC<CustomerListType> = ({adminMode=false, name,
   )
 }
 
-export default CustomerList
+export default OrganizationList

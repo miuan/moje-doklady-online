@@ -20,10 +20,12 @@ import UserDashboard from "./containers/user/UserDashboard/UserDashboard";
 import ProtectRoute from "./components/ProtectRoute/ProtectRoute";
 import UsersList from "./containers/admin/Users/UsersList";
 import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
-import OrganizationList from "./containers/user/Organizations/List";
-import OrganizationEdit from "./containers/user/Organizations/Edit";
+import OrganizationList from "./gen/Organization/List";
+import OrganizationEdit from "./gen/Organization/Edit";
 import CustomerList from "./gen/Customer/List";
 import CustomerEdit from "./gen/Customer/Edit";
+import InvoiceList from "./gen/Invoice/List";
+import InvoiceEdit from "./gen/Invoice/Edit";
 
 
 export default function App() {
@@ -70,22 +72,14 @@ export default function App() {
               <ProtectRoute path="/user/dashboard">
                 <UserDashboard />
               </ProtectRoute>
-              <ProtectRoute exact path="/user/organizations">
-                <OrganizationList />
-              </ProtectRoute>
-              <ProtectRoute exact path="/user/organizations/create">
-                <OrganizationEdit />
-              </ProtectRoute>
+              <ProtectRoute exact path="/user/organizations"  children={<OrganizationList />} />
               <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
-
-
-              <ProtectRoute exact path="/user/customers">
-                <CustomerList />
-              </ProtectRoute>
-              <ProtectRoute exact path="/user/customers/create">
-                <CustomerEdit />
-              </ProtectRoute>
+              
+              <ProtectRoute exact path="/user/customers" children={<CustomerList />} />
               <ProtectRoute path="/user/customers/:id" children={<CustomerEdit />} />
+
+              <ProtectRoute exact path="/user/invoices" children={<InvoiceList />} />
+              <ProtectRoute path="/user/invoices/:id" children={<InvoiceEdit />} />
 
               <Route path="/user/info">
                 {/* <UserInfo /> */}

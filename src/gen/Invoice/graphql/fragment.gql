@@ -1,0 +1,8 @@
+fragment InvoiceFragment on Invoice {
+    name,
+id,
+items{id},
+organization{id},
+customer{id},
+user{id}
+}
