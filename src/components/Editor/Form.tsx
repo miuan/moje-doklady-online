@@ -17,7 +17,7 @@ export const BaseForm: React.FC<TBaseForm> = ({ model, fields, doUpdate, edit = 
   useEffect(()=>{
     for(const field of fields as any){
       const name = field.name || field
-      methods.setValue(name, model[name])
+      methods.setValue(name, model[name], {shouldDirty: false})
     } 
   }, [model])
   
@@ -25,7 +25,7 @@ export const BaseForm: React.FC<TBaseForm> = ({ model, fields, doUpdate, edit = 
     <FormProvider {...methods} >
       <Form onSubmit={methods.handleSubmit(doUpdate)}>
         {fields.map((field:any)=>(<BaseControl model={model} field={field} />))}
-        <input type="submit" />
+        <button className="btn btn-primary" type="submit">Save</button>
       </Form>
     </FormProvider>
   );

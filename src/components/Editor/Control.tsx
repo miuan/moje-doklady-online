@@ -38,9 +38,8 @@ export const BaseControl: React.FC<IBaseControl> = ({ model, field}) => {
 
   return (
     <Form.Group controlId={`form-${name}`}>
-          <Form.Label>{label}</Form.Label>
+          <Form.Label>{label} {required && '*'}</Form.Label>
           <Form.Control
-            defaultValue={model[name]}
               type="text"
               placeholder={placeholder}
               {...register(name as any, {required})}

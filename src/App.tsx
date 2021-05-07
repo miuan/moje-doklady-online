@@ -27,6 +27,7 @@ import CustomerEdit from "./gen/Customer/Edit";
 import InvoiceList from "./gen/Invoice/List";
 import InvoiceEdit from "./gen/Invoice/Edit";
 
+import './App.css'
 
 export default function App() {
 
