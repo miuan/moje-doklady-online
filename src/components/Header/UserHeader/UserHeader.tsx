@@ -7,9 +7,16 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem'
 import { useQuery } from '@apollo/client'
 import { loader } from 'graphql.macro'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../../../app/store'
+
+
 export const ALL_ORGANIZATION_QUERY = loader('./graphql/allOrganizations.gql')
 
 const UserHeader = ({user, onLogout}:any) =>  {
+  const selected = useSelector((state:RootState) => state.organization.selected)
+  const dispatch = useDispatch()
+  
   const [orgs, setOrgs] = useState<{id:string; name:string}[]>([])
   const { refetch: userRefetch, loading: userLoading } = useQuery(ALL_ORGANIZATION_QUERY, {
     onError: (e) => {
@@ -19,7 +26,7 @@ const UserHeader = ({user, onLogout}:any) =>  {
       setOrgs(data)
     },
     variables: {filter:{AND:[{user_every:{id:user.id}}]}}
-  });
+  })
 
   
   return ( <div className="header-light transparent scroll-light container">
