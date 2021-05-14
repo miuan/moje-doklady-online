@@ -8,6 +8,8 @@ import { CREATE_MUTATION, FIELDS, ONE_QUERY, OrganizationEditType, UPDATE_MUTATI
 export const OrganizationEdit:(obj:OrganizationEditType & {primary?: boolean})=>any = ({primary, name, fields, createMutation, updateMutation, oneQuery }) => {
     let params = useParams() as any;
     const history = useHistory()
+    const query = new URLSearchParams(history.location.search)
+    const path = query.get('path')
 
     const id = params.id !== 'create' && params.id
     const dispatch = useAppDispatch();
@@ -16,11 +18,12 @@ export const OrganizationEdit:(obj:OrganizationEditType & {primary?: boolean})=>
       
       if(data.createOrganization) {
         dispatch(add(data.createOrganization))
-        dispatch(select(data.createOrganization))
+        dispatch(select(data.createOrganization.id))
       }
       else if(data.updateOrganization) dispatch(update(data.updateOrganization))
 
-      history.goBack()
+      if (path) history.push(path)
+      else history.goBack()
     }
   
     return (<div className={`base-edit-Organization base-edit`}>

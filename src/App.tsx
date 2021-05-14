@@ -28,6 +28,7 @@ import InvoiceList from "./gen/Invoice/List";
 import InvoiceEdit from "./gen/Invoice/Edit";
 
 import './App.css'
+import OrganizationRoute from "./components/ProtectRoute/OrganizationRoute";
 
 export default function App() {
 
@@ -70,9 +71,7 @@ export default function App() {
               
               <Route path="/verify-user/:verifyToken" component={VerifyUser} />
               
-              <ProtectRoute path="/user/dashboard">
-                <UserDashboard />
-              </ProtectRoute>
+              <OrganizationRoute path="/user/dashboard" children={<UserDashboard />} />
               <ProtectRoute exact path="/user/organizations"  children={<OrganizationList />} />
               <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
               <ProtectRoute path="/user/organizations/:id/primary" children={<OrganizationEdit primary={true}/>} />
@@ -80,8 +79,8 @@ export default function App() {
               <ProtectRoute exact path="/user/customers" children={<CustomerList />} />
               <ProtectRoute path="/user/customers/:id" children={<CustomerEdit />} />
 
-              <ProtectRoute exact path="/user/invoices" children={<InvoiceList />} />
-              <ProtectRoute path="/user/invoices/:id" children={<InvoiceEdit />} />
+              <OrganizationRoute exact path="/user/invoices" children={<InvoiceList />} />
+              <OrganizationRoute path="/user/invoices/:id" children={<InvoiceEdit />} />
 
               <Route path="/user/info">
                 {/* <UserInfo /> */}

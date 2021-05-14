@@ -13,6 +13,8 @@ import { useAppDispatch } from "../../../app/hooks";
 export const REGISTER_MUTATION = loader('./graphql/register.gql')
 
 export const Register: React.FC = () => {
+  const defaultPath = process.env.REACT_APP_DEFAULT_USER_PATH || '/user/dashboard'
+
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [copy, setCopy] = useState("");
@@ -20,7 +22,7 @@ export const Register: React.FC = () => {
   const history = useHistory()
   const userDisptatch = useUserDispatch()
   const dispatch = useAppDispatch();
-
+  
   const [register, { loading, data, error }] = useMutation(REGISTER_MUTATION, {
     errorPolicy: "none",
   });
@@ -48,8 +50,8 @@ export const Register: React.FC = () => {
       userDisptatch({type: USER_LOGIN, userToken: data.register_v1})
       dispatch(setAll(data.register_v1.user.organizations))
       dispatch(select(data.register_v1.user.selectedOrgId))
-     dispatch(changeState('loaded'))
-      history.push('/user/dashboard')
+      dispatch(changeState('loaded'))
+      history.replace(defaultPath)
     } catch (ex) {
         console.log('onError', data)
         setEmailProbablyTaken(true)

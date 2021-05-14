@@ -12,10 +12,12 @@ export interface OrganizationState {
   state: 'init' | 'loading' | 'loaded' 
 }
 
+const initialSelected = localStorage.getItem('organization.selected')
+
 const initialState: OrganizationState = {
   all: [],
   state: 'init',
-  selected: JSON.parse(localStorage.getItem('organization.selected') || '{}') || undefined
+  selected: initialSelected && JSON.parse(initialSelected)
 };
 
 
@@ -27,9 +29,16 @@ export const organizationSlice = createSlice({
       state.state = action.payload
     },
     select: (state, action: PayloadAction<string>) => {
-      state.selected = state.all.find((org=>org.id==action.payload))
-      if(state.selected){
+      const selected = state.all.find((org=>org.id==action.payload))
+      if(selected){
+        state.selected = selected
         localStorage.setItem('organization.selected', JSON.stringify(state.selected))
+      } else if(state.selected) {
+        // if you log out and log with another user
+        // clean data from local storage othervise 
+        // will show not existitng org
+        delete state.selected
+        localStorage.removeItem('organization.selected')
       }
 
     },
@@ -45,6 +54,10 @@ export const organizationSlice = createSlice({
         else return org
       }) as TOrganization[]
       
+      // if update affected selected update also selected
+      if(state.selected && state.selected.id === action.payload.id){
+          state.selected = action.payload
+      }
     },
 
   },

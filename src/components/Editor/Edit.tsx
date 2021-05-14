@@ -70,7 +70,6 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
       setUnauthorized(true)
     }
 
-    if(onUpdated) onUpdated(loadedData)
   }
 
   const skipLoading = !externId

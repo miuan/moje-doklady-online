@@ -70,8 +70,8 @@ const UserHeader = ({user, onLogout}:any) =>  {
   </div>
   <div className="col-md-2">
   <Dropdown>
-    <Dropdown.Toggle variant="normal" id="dropdown-basic">
-      {selectedOrganization ? selectedOrganization.name : 'Organization' }
+    <Dropdown.Toggle variant={selectedOrganization ? 'normal': 'danger'} id="dropdown-basic">
+      {selectedOrganization ? selectedOrganization.name : 'No organization' }
     </Dropdown.Toggle>
 
     <Dropdown.Menu>
