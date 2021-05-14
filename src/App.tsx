@@ -21,7 +21,7 @@ import ProtectRoute from "./components/ProtectRoute/ProtectRoute";
 import UsersList from "./containers/admin/Users/UsersList";
 import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
 import OrganizationList from "./gen/Organization/List";
-import OrganizationEdit from "./gen/Organization/Edit";
+import OrganizationEdit from "./containers/user/Organization/Edit";
 import CustomerList from "./gen/Customer/List";
 import CustomerEdit from "./gen/Customer/Edit";
 import InvoiceList from "./gen/Invoice/List";
@@ -75,6 +75,7 @@ export default function App() {
               </ProtectRoute>
               <ProtectRoute exact path="/user/organizations"  children={<OrganizationList />} />
               <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
+              <ProtectRoute path="/user/organizations/:id/primary" children={<OrganizationEdit primary={true}/>} />
               
               <ProtectRoute exact path="/user/customers" children={<CustomerList />} />
               <ProtectRoute path="/user/customers/:id" children={<CustomerEdit />} />

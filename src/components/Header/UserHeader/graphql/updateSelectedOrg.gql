@@ -1,0 +1,5 @@
+mutation UpdateUser($userId: ID!, $selectedOrgId: String!) {
+    updateUser(id: $userId, selectedOrgId:$selectedOrgId) {
+      selectedOrgId
+    }
+}

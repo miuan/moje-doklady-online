@@ -1,32 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Nav from 'react-bootstrap/Nav'
 import Badge from 'react-bootstrap/Badge'
 import DropdownItem from 'react-bootstrap/esm/DropdownItem'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { loader } from 'graphql.macro'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../../app/store'
+import { changeState, select, setAll, TOrganization } from '../../../app/reducers/organizationSlice'
+import OrganizationItem from './OrganizationItem'
 
 
 export const ALL_ORGANIZATION_QUERY = loader('./graphql/allOrganizations.gql')
+export const UPDATE_SELECTED_ORG_ID_MUTATION = loader('./graphql/updateSelectedOrg.gql')
 
 const UserHeader = ({user, onLogout}:any) =>  {
-  const selected = useSelector((state:RootState) => state.organization.selected)
+  const stateOrganization = useSelector((state:RootState) => state.organization.state)
+  const selectedOrganization = useSelector((state:RootState) => state.organization.selected)
+  const allOrganizations: TOrganization[] = useSelector((state:RootState) => state.organization.all)
   const dispatch = useDispatch()
   
-  const [orgs, setOrgs] = useState<{id:string; name:string}[]>([])
-  const { refetch: userRefetch, loading: userLoading } = useQuery(ALL_ORGANIZATION_QUERY, {
+  
+  const [loadAllOrganizations, { refetch: userRefetch, loading: userLoading }] = useLazyQuery(ALL_ORGANIZATION_QUERY, {
     onError: (e) => {
 
     }, onCompleted: (raw) => {
       const data = raw[Object.keys(raw)[0]];
-      setOrgs(data)
+      dispatch(setAll(data))
+      dispatch(changeState('loaded'))
     },
     variables: {filter:{AND:[{user_every:{id:user.id}}]}}
   })
+
+  const [updateUserSelectedOrgId, { loading, data, error }] = useMutation(UPDATE_SELECTED_ORG_ID_MUTATION);
+
+  useEffect(()=>{
+    if(stateOrganization == 'init' && (!allOrganizations || (allOrganizations as []).length < 1)) {
+      dispatch(changeState('loading'))
+      loadAllOrganizations()
+    }
+  }, [allOrganizations, stateOrganization])
+
+  const onSelectOrg = (selectedOrgId: any, event: Object) => {
+    dispatch(select(selectedOrgId))
+    updateUserSelectedOrgId({ variables: { selectedOrgId, userId: user.id } })
+  }
 
   
   return ( <div className="header-light transparent scroll-light container">
@@ -51,11 +71,11 @@ const UserHeader = ({user, onLogout}:any) =>  {
   <div className="col-md-2">
   <Dropdown>
     <Dropdown.Toggle variant="normal" id="dropdown-basic">
-      Organizations
+      {selectedOrganization ? selectedOrganization.name : 'Organization' }
     </Dropdown.Toggle>
 
     <Dropdown.Menu>
-      {orgs.map(org=>(<Dropdown.Item >{org.name} <Link className="" to={`/user/organizations/${org.id}`}>edit</Link></Dropdown.Item>))}
+      {allOrganizations.map(org=>(<OrganizationItem org={org} onSelectOrg={onSelectOrg} selected={(selectedOrganization && selectedOrganization.id == org.id)}/>))}
       <Dropdown.Item href="/user/organizations/create" >+ Organization</Dropdown.Item>
       <Dropdown.Item href="/"><Link className="" to="/" onClick={onLogout}>Logout</Link></Dropdown.Item>
     </Dropdown.Menu>

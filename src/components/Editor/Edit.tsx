@@ -114,11 +114,11 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
     query.UPDATE_MUTATION,
     {
       errorPolicy: "none",
-      onCompleted: (data: any) => { 
+      onCompleted: (raw: any) => { 
         
-        const raw =  getDataFromRaw(data)
+        const data =  getDataFromRaw(raw)
         console.log("UPDATED", data, raw);
-        setLocalId(raw.id);
+        setLocalId(data.id);
 
         setErrors(null)
 

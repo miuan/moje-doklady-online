@@ -96,7 +96,7 @@ function UserProvider({children}: any) {
 function useUserState() {
   const context = React.useContext(UserStateContext)
   if (context === undefined) {
-    throw new Error('useCountState must be used within a UserProvider')
+    throw new Error('useUserState must be used within a UserProvider')
   }
   return context
 }
@@ -104,7 +104,7 @@ function useUserState() {
 function useUserDispatch() {
   const context = React.useContext(UserDispatchContext)
   if (context === undefined) {
-    throw new Error('useCountDispatch must be used within a UserProvider')
+    throw new Error('useUserDispatch must be used within a UserProvider')
   }
   return context
 }

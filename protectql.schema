@@ -67,6 +67,7 @@ type InvoiceItem @model {
 @create("public") 
 type User @model {
 
+  selectedOrgId: String
   organizations: [Organization] @relation(name: "OrganizationOnUser")
   customers: [Customer] @relation(name: "CustomerOnUser")
   invoices: [Invoice] @relation(name: "InvoiceOnUser")

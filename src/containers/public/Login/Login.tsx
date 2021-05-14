@@ -1,28 +1,17 @@
 import React, { useState, useContext } from 'react'
 import gql from 'graphql-tag'
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
 import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { Modal, Form, Button, Alert } from 'react-bootstrap'
 import { isEmailValid } from './utils/utils';
 import { getProtectQLRoot } from '../../../app/utils';
+import { loader } from 'graphql.macro';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import organizationReducer, { select, setAll, changeState } from '../../../app/reducers/organizationSlice';
+import { RootState } from '../../../app/store';
 
-const LOGIN_QL = gql`
-  mutation Login($email: String!, $pass: String!) {
-    login_v1(email: $email, password:$pass) {
-      token,
-      refreshToken,
-      user {
-        id
-        email,
-        verified,
-        roles {
-          name
-        }
-    }
-    } 
-}
-`;
+export const LOGIN_QL = loader('./graphql/login.gql')
 
 export const Login: React.FC = () => {
     const [email, setEmail] = useState(localStorage.getItem('user.email') || '')
@@ -36,7 +25,9 @@ export const Login: React.FC = () => {
     const path = query.get('path')
     const role = query.get('role')
     const defaultPath = process.env.REACT_APP_DEFAULT_USER_PATH || '/user/dashboard'
-    const dispatch = useUserDispatch()
+    const userDispatch = useUserDispatch()
+
+    const dispatch = useAppDispatch();
 
     const [login, { loading, data, error }] = useMutation(LOGIN_QL, { errorPolicy: 'none' });
 
@@ -46,11 +37,12 @@ export const Login: React.FC = () => {
         }
 
         try {
+            dispatch(changeState('loading'))
             const {data}:any = await login({ variables: { email, pass } })
-            dispatch({
-                type: USER_LOGIN,
-                userToken: data.login_v1 as User
-            })
+            userDispatch({type: USER_LOGIN, userToken: data.login_v1 as User})
+            dispatch(setAll(data.login_v1.user.organizations))
+            dispatch(select(data.login_v1.user.selectedOrgId))
+            dispatch(changeState('loaded'))
             // go to path in case user want to reach some page before login
             // or go to default path
             history.replace(path || defaultPath)

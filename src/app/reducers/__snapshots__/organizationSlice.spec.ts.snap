@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`organization reducer should add 1`] = `
+Object {
+  "all": Array [
+    Object {
+      "id": "1",
+      "name": "1",
+    },
+    Object {
+      "id": "2",
+      "name": "2",
+    },
+    Object {
+      "id": "3",
+      "name": "3",
+    },
+  ],
+  "selected": Object {
+    "id": "1",
+    "name": "1",
+  },
+}
+`;
+
+exports[`organization reducer should select 1`] = `
+Object {
+  "all": Array [
+    Object {
+      "id": "1",
+      "name": "1",
+    },
+    Object {
+      "id": "2",
+      "name": "2",
+    },
+  ],
+  "selected": Object {
+    "id": "2",
+    "name": "2",
+  },
+}
+`;
+
+exports[`organization reducer should update 1`] = `
+Object {
+  "all": Array [
+    Object {
+      "id": "1",
+      "name": "1-updated",
+    },
+    Object {
+      "id": "2",
+      "name": "2",
+    },
+  ],
+  "selected": Object {
+    "id": "1",
+    "name": "1",
+  },
+}
+`;
