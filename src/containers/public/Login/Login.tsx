@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react'
 import gql from 'graphql-tag'
 import { Link, useHistory } from 'react-router-dom';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { Modal, Form, Button, Alert } from 'react-bootstrap'
 import { isEmailValid } from './utils/utils';
 import { getProtectQLRoot } from '../../../app/utils';
 import { loader } from 'graphql.macro';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import organizationReducer, { select, setAll, changeState } from '../../../app/reducers/organizationSlice';
-import { RootState } from '../../../app/store';
+import { changeState, setupOrganizationFromUser } from '../../../app/reducers/organizationSlice';
+import { login, UserToken } from '../../../app/reducers/userSlice';
 
 export const LOGIN_QL = loader('./graphql/login.gql')
 
@@ -25,11 +24,10 @@ export const Login: React.FC = () => {
     const path = query.get('path')
     const role = query.get('role')
     const defaultPath = process.env.REACT_APP_DEFAULT_USER_PATH || '/user/dashboard'
-    const userDispatch = useUserDispatch()
 
     const dispatch = useAppDispatch();
 
-    const [login, { loading, data, error }] = useMutation(LOGIN_QL, { errorPolicy: 'none' });
+    const [loginMutation, { loading, data, error }] = useMutation(LOGIN_QL, { errorPolicy: 'none' });
 
     const onLogin = async () => {
         if(!isEmailValid(email)) {
@@ -38,11 +36,11 @@ export const Login: React.FC = () => {
 
         try {
             dispatch(changeState('loading'))
-            const {data}:any = await login({ variables: { email, pass } })
-            userDispatch({type: USER_LOGIN, userToken: data.login_v1 as User})
-            dispatch(setAll(data.login_v1.user.organizations))
-            dispatch(select(data.login_v1.user.selectedOrgId))
-            dispatch(changeState('loaded'))
+            const {data}:any = await loginMutation({ variables: { email, pass } })
+            const userToken = data.login_v1 as UserToken
+
+            dispatch(login(userToken))
+            dispatch(setupOrganizationFromUser(userToken.user))
             // go to path in case user want to reach some page before login
             // or go to default path
             history.replace(path || defaultPath)

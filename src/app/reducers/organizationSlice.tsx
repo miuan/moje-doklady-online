@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
+import {User} from './userSlice'
 
 export type TOrganization = {
   id: string
@@ -60,11 +61,24 @@ export const organizationSlice = createSlice({
       }
     },
 
+    setupOrganizationFromUser(state, action: PayloadAction<User>){
+      const user = action.payload
+
+      if(user && user.organizations && user.organizations.length > 0) {
+        state.all = user.organizations as TOrganization[]
+        state.state = 'loaded'
+
+        // if update affected selected update also selected
+        if(user.selectedOrgId){
+          this.select(state, {payload: user.selectedOrgId, type: action.type })
+        }
+      }
+    }
   },
 })
 
 export const selectSelected = (state: RootState) => state.organization.selected;
 // Action creators are generated for each case reducer function
-export const { select, setAll, add, update, changeState } = organizationSlice.actions
+export const { select, setAll, add, update, changeState, setupOrganizationFromUser } = organizationSlice.actions
 
 export default organizationSlice.reducer

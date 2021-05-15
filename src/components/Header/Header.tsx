@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useUserState, useUserDispatch, USER_INIT, USER_LOGOUT } from '../../app/userContext';
+import { logout, selectUser } from '../../app/reducers/userSlice';
 import AdminHeader from './AdminHeader';
 import PublicHeader  from './PublicHeader';
 import UserHeader from './UserHeader/UserHeader'
 
 export const Header:React.FC = () => {
-  const user = useUserState()
-  const userDispatch = useUserDispatch()
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch()
 
   const onLogout = () => {
-    userDispatch({ type: USER_LOGOUT })
+    dispatch(logout())
   }
 
   if (user && user.token) {
-    if(user.roles.indexOf('admin') !== -1) return (<AdminHeader user={user} onLogout={onLogout} />)
+    if(user.roles.find(r=>r.name==='admin')) return (<AdminHeader user={user} onLogout={onLogout} />)
     else return (<UserHeader user={user} onLogout={onLogout} />)
   }
 

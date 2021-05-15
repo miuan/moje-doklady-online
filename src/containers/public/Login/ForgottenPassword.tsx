@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { Modal, Form, Alert, Button } from "react-bootstrap";
 import { Link, useHistory } from 'react-router-dom';
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { isEmailValid } from "../../../app/utils";
 
 const FORGOTTEN_PASSWORD_REQUEST_MUTATION = gql`
@@ -21,7 +20,6 @@ export const ForgottenPassword: React.FC = () => {
   const [emailSent, setEmailSent] = useState(false)
 
   const history = useHistory()
-  const dispatch = useUserDispatch()
 
   const [checkResetEmail, { loading: loadingCheckResetEmail, data: checkResetEmailData, error: checkResetEmailError }] = useMutation(FORGOTTEN_PASSWORD_REQUEST_MUTATION, {
     errorPolicy: "none",

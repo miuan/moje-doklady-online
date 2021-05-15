@@ -1,0 +1,6 @@
+#import "./customer-selector-fragment.gql"
+
+query allCustomers($filter: CustomerFilter){ 
+  allCustomers(filter: $filter) {
+    ...CustomerFragment
+  }}

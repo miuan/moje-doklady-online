@@ -3,12 +3,12 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { Modal, Form, Alert, Button, ProgressBar } from "react-bootstrap";
 import { Link, useHistory } from 'react-router-dom';
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { isEmailValid, passwordStrong } from "../../../app/utils";
 import PasswordComponent from "./PasswordComponent";
 import { loader } from 'graphql.macro';
-import { changeState, select, setAll } from "../../../app/reducers/organizationSlice";
+import { changeState, setupOrganizationFromUser } from "../../../app/reducers/organizationSlice";
 import { useAppDispatch } from "../../../app/hooks";
+import { login, UserToken } from "../../../app/reducers/userSlice";
 
 export const REGISTER_MUTATION = loader('./graphql/register.gql')
 
@@ -20,10 +20,9 @@ export const Register: React.FC = () => {
   const [copy, setCopy] = useState("");
 
   const history = useHistory()
-  const userDisptatch = useUserDispatch()
   const dispatch = useAppDispatch();
   
-  const [register, { loading, data, error }] = useMutation(REGISTER_MUTATION, {
+  const [registerMutation, { loading, data, error }] = useMutation(REGISTER_MUTATION, {
     errorPolicy: "none",
   });
 
@@ -32,7 +31,6 @@ export const Register: React.FC = () => {
   const [strong, setStrong] = useState(passwordStrong(''))
 
   const [invalidCopy, setInvalidCopy] = useState(false);
-
 
   const onRegister = async () => {
     if(!isEmailValid(email)) {
@@ -46,11 +44,12 @@ export const Register: React.FC = () => {
 
     try {
       dispatch(changeState('loading'))
-      const { data } = await register({ variables: { email, pass } })
-      userDisptatch({type: USER_LOGIN, userToken: data.register_v1})
-      dispatch(setAll(data.register_v1.user.organizations))
-      dispatch(select(data.register_v1.user.selectedOrgId))
-      dispatch(changeState('loaded'))
+      const { data } = await registerMutation({ variables: { email, pass } })
+      const userToken = data.login_v1 as UserToken
+
+      dispatch(login(userToken))
+      dispatch(setupOrganizationFromUser(userToken.user))
+      
       history.replace(defaultPath)
     } catch (ex) {
         console.log('onError', data)

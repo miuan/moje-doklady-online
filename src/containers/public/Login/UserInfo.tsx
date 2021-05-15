@@ -3,9 +3,10 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { Modal, Form, Alert, Button } from "react-bootstrap";
 import { Link, useHistory } from 'react-router-dom';
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import PasswordComponent from "./PasswordComponent";
 import { passwordStrong } from "../../../app/utils";
+import { useDispatch } from "react-redux";
+import { login } from "../../../app/reducers/userSlice";
 
 const CHANGE_PASSWORD_MUTATION = gql`
   mutation changePassword($userId: ID!, $oldPassword: String!, $newPassword: String!) {
@@ -39,7 +40,7 @@ export const UserInfo: React.FC = () => {
 
   const [showVerifyEmailSended, setShowVerifyEmailSended] = useState(false);
   const history = useHistory()
-  const dispatch = useUserDispatch()
+  const dispatch = useDispatch()
 
   
 
@@ -88,10 +89,7 @@ export const UserInfo: React.FC = () => {
 
     try {
       const { data } = await changePassword({ variables: { userId, oldPassword, newPassword } })
-      dispatch({
-        type: USER_LOGIN,
-        userToken: data.changePassword_v1
-      })
+      dispatch(login(data.changePassword_v1))
       setShowPasswordChanged(true)
       
       setOldPassword('')

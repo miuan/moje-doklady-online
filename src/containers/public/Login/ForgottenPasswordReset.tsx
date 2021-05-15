@@ -3,33 +3,17 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { Modal, Form, Alert, Button, ProgressBar } from "react-bootstrap";
 import { useHistory, Link } from "react-router-dom";
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import { isEmailValid, isPasswordValid, passwordStrong } from "../../../app/utils";
 import _ from "lodash";
 import PasswordComponent from "./PasswordComponent";
+import { useDispatch } from "react-redux";
+import { login } from "../../../app/reducers/userSlice";
+import { loader } from "graphql.macro";
+import { changeState, setupOrganizationFromUser } from "../../../app/reducers/organizationSlice";
 
-const FORGOTTEN_PASSWORD_CHECK_MUTATION = gql`
-  mutation forgottenPasswordCheck($token: String!) {
-    check: forgottenPasswordCheck_v1(token: $token) {
-      status
-    }
-  }
-`;
+export const FORGOTTEN_PASSWORD_CHECK_MUTATION = loader('./graphql/forgotten-password-check.gql')
+export const FORGOTTEN_PASSWORD_RESET_MUTATION = loader('./graphql/forgotten-password-reset.gql')
 
-const FORGOTTEN_PASSWORD_RESET_MUTATION = gql`
-  mutation forgottenPasswordReset($token: String!, $password: String!) {
-    reset: forgottenPasswordReset_v1(token: $token, password: $password) {
-      refreshToken
-      token
-      user {
-        roles{name}
-        id,
-        email,
-        verified
-      }
-    }
-  }
-`;
 
 export const ForgotenPasswordReset: React.FC<any> = ({match}) => {
   const token = _.get(match, 'params.token')
@@ -37,7 +21,7 @@ export const ForgotenPasswordReset: React.FC<any> = ({match}) => {
   const [copy, setCopy] = useState("");
 
   const history = useHistory()
-  const dispatch = useUserDispatch()
+  const dispatch = useDispatch()
 
   const [doForgottenPasswordCheck, { loading: loadingForgottenPasswordCheck, data: dataForgottenPasswordCheck, error: errorForgottenPasswordCheck }] = useMutation(FORGOTTEN_PASSWORD_CHECK_MUTATION, {
     errorPolicy: "none",
@@ -80,11 +64,10 @@ export const ForgotenPasswordReset: React.FC<any> = ({match}) => {
     }
 
     try {
+      dispatch(changeState('loading'))
       const { data } = await doForgottenPasswordReset({ variables: { token, password } })
-      dispatch({
-        type: USER_LOGIN,
-        userToken: data.reset
-      })
+      dispatch(login(data.reset))
+      dispatch(setupOrganizationFromUser(data.reset.user))
       history.replace('/user/projects')
     } catch (ex) {
         console.log('onError', data)

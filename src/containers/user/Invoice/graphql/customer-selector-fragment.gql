@@ -1,0 +1,9 @@
+fragment CustomerFragment on Customer {
+    name,
+    street,
+    zip,
+    city,
+    country,
+    ico,
+    id
+}

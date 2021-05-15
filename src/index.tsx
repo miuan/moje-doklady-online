@@ -14,9 +14,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ApolloProvider client={apolloClient} >
-        <UserProvider >
           <App />
-        </UserProvider>
       </ApolloProvider>
     </Provider>
   </React.StrictMode>,

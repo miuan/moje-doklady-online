@@ -35,7 +35,11 @@ export const BaseControl: React.FC<IBaseControl> = ({ model, field}) => {
   const required = (field as TControlField).required ? true : false
   const error = (errors && errors[name])
   const touched = touchedFields && touchedFields[name]
-
+  
+  if(control){
+    return (<React.Fragment>{control && control({field} as any)} </React.Fragment>)
+  }
+  
   return (
     <Form.Group controlId={`form-${name}`}>
           <Form.Label>{label} {required && '*'}</Form.Label>

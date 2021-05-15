@@ -25,7 +25,7 @@ import OrganizationEdit from "./containers/user/Organization/Edit";
 import CustomerList from "./gen/Customer/List";
 import CustomerEdit from "./gen/Customer/Edit";
 import InvoiceList from "./gen/Invoice/List";
-import InvoiceEdit from "./gen/Invoice/Edit";
+import InvoiceEdit from "./containers/user/Invoice/Edit";
 
 import './App.css'
 import OrganizationRoute from "./components/ProtectRoute/OrganizationRoute";

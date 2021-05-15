@@ -3,8 +3,9 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { Modal, Form, Alert, Button } from "react-bootstrap";
 import { Link, useHistory } from 'react-router-dom';
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext';
 import * as _ from 'lodash'
+import { login } from "../../../app/reducers/userSlice";
+import { useDispatch } from "react-redux";
 
 const VERIFY_EMAIL_MUTATION = gql`
   mutation verifyEmail($verifyToken: String!) {
@@ -26,7 +27,7 @@ export const VerifyUser: React.FC<any> = ({match}) => {
   const [verified, setVerified] = useState(false);
 
   const history = useHistory()
-  const dispatch = useUserDispatch()
+  const dispatch = useDispatch()
 
   const [verify, { loading: verifying, data, error: verifiedError }] = useMutation(VERIFY_EMAIL_MUTATION, {
     errorPolicy: "none",
@@ -35,10 +36,7 @@ export const VerifyUser: React.FC<any> = ({match}) => {
   const doVerifyUser = async () => {
     try {
       const { data } = await verify({ variables: { verifyToken } })
-      dispatch({
-        type: USER_LOGIN,
-        userToken: data.verifyEmail_v1
-      })
+      dispatch(login(data.verifyEmail_v1))
       setVerified(true)
       localStorage.setItem('user.verifyToken', verifyToken)
       setTimeout(()=>{
