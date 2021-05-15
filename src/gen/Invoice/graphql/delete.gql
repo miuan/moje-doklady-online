@@ -1,5 +1,5 @@
   mutation deleteInvoice($id: ID!) {
-    deleteInvoice(id: $id) {
+    deleted: deleteInvoice(id: $id) {
       id
     }
   }

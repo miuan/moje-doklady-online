@@ -1,5 +1,5 @@
   mutation deleteCustomer($id: ID!) {
-    deleteCustomer(id: $id) {
+    deleted: deleteCustomer(id: $id) {
       id
     }
   }

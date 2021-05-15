@@ -9,6 +9,7 @@ import DeleteModal from '../common/DeleteModal';
 import Unauthorized from '../common/Unauthorized';
 import { DocumentNode } from 'graphql';
 import { IFilteredField } from './RowItem';
+import { TBaseEditUpdateCacheFn } from '../Editor/Edit';
 
 export interface IFilterWithParams {
   filter?: string
@@ -28,9 +29,11 @@ export interface IProjectList {
     queries: ITableQueries
     fields?: IFilteredField[]
     name: string
+    showDelete?: boolean
+    updateCache?:TBaseEditUpdateCacheFn
 }
 
-export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false, queries, fields}) => {
+export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false, queries, fields, showDelete, updateCache}) => {
   const [unauthorized, setUnauthorized] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteObject, setDeleteObject] = useState(null)
@@ -38,10 +41,9 @@ export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false,
   const [deletingOnDeleteDialog, setDeletingOnDeleteDialog] = useState(false)
 
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<any>([])
   const [error, setError] = useState<any>()
 
-  const { refetch: userRefetch, loading: userLoading } = useQuery(adminMode? queries.ADMIN_LIST_QUERY : queries.USER_LIST_QUERY, {
+  const { data, refetch: userRefetch, loading: userLoading } = useQuery(adminMode? queries.ADMIN_LIST_QUERY : queries.USER_LIST_QUERY, {
     onError: (e) => {
       console.log('onError >>> ', e.message)
       if(e.message == 'GraphQL error: Unauhorized'){
@@ -53,12 +55,12 @@ export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false,
       console.log('user: onCompleted', d)
       setLoading(false)
 
-      const dataFields = Object.getOwnPropertyNames(d)
-      if(dataFields.length > 0 && d[dataFields[0]].length > 0){
-        setData(d[dataFields[0]])
-      } else {
-        setData([])
-      }
+      // const dataFields = Object.getOwnPropertyNames(d)
+      // if(dataFields.length > 0 && d[dataFields[0]].length > 0){
+      //   setData(d[dataFields[0]])
+      // } else {
+      //   setData([])
+      // }
       
     },
     variables: {filter}
@@ -83,6 +85,7 @@ export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false,
           setUnauthorized(true)
         }
       },
+      update:updateCache
     });
 
     const onHideDidaloDelete = () => {
@@ -127,7 +130,7 @@ export const Table : React.FC<IProjectList> = ({filter, name, adminMode = false,
               </thead>
               <tbody>
               {
-                data.length && data.map((projectItem:any)=>(<ListRow name={name} item={projectItem} onDelete={onDelete} fields={fields} showDelete={adminMode}/>))
+                data && data.all && data.all.length && data.all.map((projectItem:any)=>(<ListRow name={name} item={projectItem} onDelete={onDelete} fields={fields} showDelete={showDelete || adminMode}/>))
               }
               </tbody>
             

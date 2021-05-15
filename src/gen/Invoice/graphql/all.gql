@@ -1,6 +1,6 @@
 #import "./fragment.gql"
 
 query allInvoices($filter: InvoiceFilter){ 
-  allInvoices(filter: $filter) {
+  all: allInvoices(filter: $filter) {
     ...InvoiceFragment
   }}

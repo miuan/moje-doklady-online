@@ -5,6 +5,7 @@ import FilterItem from './FilteredItem'
 import {Navbar, Button} from 'react-bootstrap'
 import './FilteredList.css'
 import { IFilteredField } from './RowItem'
+import { TBaseEditUpdateCacheFn } from '../Editor/Edit'
 
 
 
@@ -14,6 +15,8 @@ export interface IProjectFilterList {
     adminMode?: boolean
     queries: ITableQueries
     fields: IFilteredField[]
+    showDelete?: boolean,
+    updateCache?:TBaseEditUpdateCacheFn
 }
 
 const createFilter = () => {
@@ -61,21 +64,23 @@ const filterDestruct = (filter: any) => {
 }
 
 
-export const FilteredList:React.FC<IProjectFilterList> = ({name, userId, adminMode=false, queries, fields}) => {
+export const createDefaultFilter = (userId? : string) => {
+    const defaultFilter = createFilter()
+    
+    if(userId){
+        addAnd(defaultFilter.AND, {user_every:{id:userId}})
+    }
+    
+    return defaultFilter
+}
+
+export const FilteredList:React.FC<IProjectFilterList> = ({name, userId, adminMode=false, queries, fields, showDelete, updateCache}) => {
 
     const [filter, setFilter] = useState(adminMode ? createFilter() : null)
     const history = useHistory()
 
     // console.log(filter, listFilter)
-    const createDefaultFilter = (userId? : string) => {
-        const defaultFilter = createFilter()
-        
-        if(userId){
-            addAnd(defaultFilter.AND, {user_every:{id:userId}})
-        }
-        
-        return defaultFilter
-    }
+
 
     const processFilter = (filter: any) => {
         const filterDestructed = filterDestruct(filter)
@@ -129,7 +134,7 @@ export const FilteredList:React.FC<IProjectFilterList> = ({name, userId, adminMo
             </div>
             <div className="row-table">
            
-            <Table name={name} filter={filter} queries={queries} adminMode={adminMode} fields={fields} />
+            <Table name={name} filter={filter} queries={queries} adminMode={adminMode} fields={fields} showDelete={showDelete} updateCache={updateCache} />
             <Button onClick={onCreateNew}>Create New</Button>
             </div>
             

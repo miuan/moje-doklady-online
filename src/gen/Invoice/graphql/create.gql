@@ -1,10 +1,9 @@
 #import "./fragment.gql"
 
 mutation createInvoice($name: String!, $organizationId: ID, $organization: InvoiceorganizationOrganization, $customerId: ID, $customer: InvoicecustomerCustomer, $itemsIds: [ID!], $items: [InvoiceitemsInvoiceItem!], $userId: ID!) {
-    createInvoice(
+    mutated: createInvoice(
       name: $name, organizationId: $organizationId, organization: $organization, customerId: $customerId, customer: $customer, itemsIds: $itemsIds, items: $items, userId: $userId
       ) {
      ...InvoiceFragment
-      
     }
   }

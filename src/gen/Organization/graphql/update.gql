@@ -1,10 +1,9 @@
 #import "./fragment.gql"
 
 mutation updateOrganization($id: ID!, $name: String, $street: String, $zip: String, $city: String, $country: String, $ico: String, $dic: String, $phone: String, $www: String, $type: String, $invoicesIds: [ID!], $invoices: [OrganizationinvoicesInvoice!]) {
-    updateOrganization(
+    mutated: updateOrganization(
       id: $id, name: $name, street: $street, zip: $zip, city: $city, country: $country, ico: $ico, dic: $dic, phone: $phone, www: $www, type: $type, invoicesIds: $invoicesIds, invoices: $invoices
       ) {
      ...OrganizationFragment
-      
     }
   }

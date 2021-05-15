@@ -32,7 +32,7 @@ export type TBaseEdit = {
   onCompleted?: TBaseEdiOnCompletedFn
 }
 
-export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields, onUpdated, updateCache, renameError, onCompleted}) => {
+export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields, onUpdated, updateCache, renameError}) => {
   const [localId, setLocalId] = useState(externId);
   const [unauthorized, setUnauthorized] = useState(false);
   const [errors, setErrors] = useState<string[]|null>([])
@@ -59,17 +59,17 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
     const loadedData = getDataFromRaw(loadedDataRaw)
 
     if(loadedData){
-      // const np = fields.reduce((o:any, field: TField)=> {
-      //   const fieldName = (field as TControlField).name ? (field as TControlField).name : field as string
-      //   o[fieldName] = loadedData[fieldName]
-      //   return o
-      // }, {})
-
       setModel({...loadedData})
     } else {
       setUnauthorized(true)
     }
+  }
 
+  const onCompleted = (raw: any) => {
+    const data = getDataFromRaw(raw)
+    setLocalId(data.id);
+    setErrors(null)
+    if(onUpdated) onUpdated(raw)
   }
 
   const skipLoading = !externId
@@ -77,54 +77,28 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
     variables: {id: externId},
     skip: skipLoading,
     onCompleted: (loadedDataRaw: any) =>{
-      console.log('loadedDataRaw', loadedDataRaw, skipLoading)
       updateDataFromLoaded(loadedDataRaw)
-      
-    }, onError: (e) => {
-      console.log('onError >>> ', e.message)
+    }, 
+    onError: (e) => {
       if(e.message == 'GraphQL error: Unauhorized'){
         setUnauthorized(true)
       }
       setModel({name:'', models: ''})
-      
     }
   });
 
-  const [
-    createProjectMutation,
-    { loading: createLoading, data: createData, error: createError }
-  ] = useMutation(query.CREATE_MUTATION, {
+  const [createProjectMutation] = useMutation(query.CREATE_MUTATION, {
     errorPolicy: "none",
-    onCompleted: (raw: any) => {
-      const data = getDataFromRaw(raw)
-      setLocalId(data.id);
-
-      setErrors(null)
-
-      if(onCompleted) onCompleted(raw)
-      if(onUpdated) onUpdated(raw)
-      // updateDataFromLoaded(raw)
-    },
+    onCompleted: onCompleted,
     update: updateCache,
     onError: handleError
   });
 
-  const [updateProjectMutation, { loading:updateLoading, data: updateData, error:updateError }] = useMutation(
+  const [updateProjectMutation] = useMutation(
     query.UPDATE_MUTATION,
     {
       errorPolicy: "none",
-      onCompleted: (raw: any) => { 
-        
-        const data =  getDataFromRaw(raw)
-        console.log("UPDATED", data, raw);
-        setLocalId(data.id);
-
-        setErrors(null)
-
-        if(onCompleted) onCompleted(raw)
-        if(onUpdated) onUpdated(raw)
-        // updateDataFromLoaded(raw)
-      },
+      onCompleted: onCompleted,
       update: updateCache,
       onError: handleError
     }

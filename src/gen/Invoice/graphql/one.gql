@@ -1,5 +1,6 @@
 #import "./fragment.gql"
 
-query invoice($id:ID){ Invoice(id:$id) {
+query invoice($id:ID){ 
+  one: Invoice(id:$id) {
       ...InvoiceFragment
     }}
