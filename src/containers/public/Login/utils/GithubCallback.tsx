@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { User, USER_LOGIN, useUserDispatch } from '../../../../app/userContext'
 import _ from 'lodash'
 import { Alert } from 'react-bootstrap'
 import { getProtectQLRoot } from '../../../../app/utils'
+import { useAppDispatch } from '../../../../app/hooks'
+import { login, UserToken } from '../../../../app/reducers/userSlice'
+import { setupOrganizationFromUser } from '../../../../app/reducers/organizationSlice'
 
 export const tokenFromFacebookCode = async (type:string, code: string) => {
     return axios.get(`${getProtectQLRoot()}/auth/${type}/callback?code=${code}`)
@@ -17,7 +19,7 @@ export const GithubCallback: React.FC<{type: string}> = ({type}) => {
 
 
     const history = useHistory()
-    const dispatch = useUserDispatch()
+    const dispatch = useAppDispatch();
 
     const [error, setError] = useState<string>()
 
@@ -31,10 +33,8 @@ export const GithubCallback: React.FC<{type: string}> = ({type}) => {
         const request = async () => {
             try {
                 const data = await tokenFromFacebookCode(type, code)
-                dispatch({
-                    type: USER_LOGIN,
-                    userToken: data.data as User
-                })
+                dispatch(login(data as any))
+                dispatch(setupOrganizationFromUser((data as any).user))
                 history.replace('/user/projects')
             } catch(ex) {
                 const response = JSON.parse(_.get(ex, 'request.response', '{}'))

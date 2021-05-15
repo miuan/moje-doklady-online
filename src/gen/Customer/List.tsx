@@ -2,7 +2,8 @@ import React from "react";
 import { loader } from "graphql.macro";
 
 import FilteredList from "../../components/List/FilteredList";
-import { useUserState } from "../../app/userContext";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../app/reducers/userSlice";
 
 
 
@@ -31,7 +32,7 @@ export type CustomerListType = {
 }
 
 export const CustomerList: React.FC<CustomerListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
-  const user = useUserState()
+  const user = useSelector(selectUser);
   return (
     <div className={`filtered-list-Customer filtered-list`}>
       <FilteredList 

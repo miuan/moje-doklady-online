@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import gql from 'graphql-tag'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import { useHistory } from "react-router-dom";
-import { User, useUserDispatch, USER_LOGIN } from '../../app/userContext';
 import { Modal, Form, Button, Alert } from 'react-bootstrap'
 
 export interface IDeleteModalParams { 
