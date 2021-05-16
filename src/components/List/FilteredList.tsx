@@ -64,7 +64,7 @@ const filterDestruct = (filter: any) => {
 }
 
 
-export const createDefaultFilter = (userId? : string) => {
+export const createDefaultFilter = (userId?: string | null) => {
     const defaultFilter = createFilter()
     
     if(userId){

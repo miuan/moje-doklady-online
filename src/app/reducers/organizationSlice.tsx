@@ -78,6 +78,7 @@ export const organizationSlice = createSlice({
 })
 
 export const selectSelected = (state: RootState) => state.organization.selected;
+export const selectSelectedId = (state: RootState) => state.organization.selected?.id;
 // Action creators are generated for each case reducer function
 export const { select, setAll, add, update, changeState, setupOrganizationFromUser } = organizationSlice.actions
 

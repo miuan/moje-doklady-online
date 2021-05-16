@@ -105,7 +105,6 @@ export const BaseEdit:React.FC<TBaseEdit> = ({id: externId, query, name, fields,
   );
 
   const onUpdate = useCallback((data) => {
-    console.log('onUpdate >>> ', localId, data)
     if(localId){
         updateProjectMutation({
             variables: {

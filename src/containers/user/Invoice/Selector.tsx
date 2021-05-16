@@ -1,13 +1,17 @@
 import { useQuery } from '@apollo/client';
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Col, Dropdown, Form, FormControl } from 'react-bootstrap'
+import { SelectCallback } from 'react-bootstrap/esm/helpers';
+import { getDataFromRaw } from '../../../components/Editor/Edit';
+
+import * as _ from 'lodash'
 
 
 // The forwardRef is important!!
 // Dropdown needs access to the DOM node in order to position the Menu
-const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
+const CustomToggle = React.forwardRef(({ children, onClick, isInvalid, isValid }: any, ref) => (
     <Button
-        variant={'light'}
+        variant={isInvalid ? 'outline-danger': (isValid? 'outline-success': 'light')}
         size={'lg'}
         ref={ref as any}
         onClick={(e) => {
@@ -42,7 +46,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
           <ul className="list-unstyled">
           {React.Children.toArray(children).filter(
             (child: any) => {
-                return !value || child.props.children.toLowerCase().startsWith(value)
+                return !value || child.props.children.toLowerCase().indexOf(value) !== -1
             }
           )}
           </ul>
@@ -51,27 +55,62 @@ const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
     },
   );
 
-export const SelectorGenerator = ({QUERY, variables}:{QUERY:any, variables: any}) => (inputs: any) => {
-  const {field} = inputs
+export const SelectorGenerator = (inputs: any) => {
+  const {name, QUERY, filter, map, required, register, placeholder, formState, setValue, storedData} = inputs
 
-  // const { data, loading, error } = useQuery(QUERY, {
-  //   variables,
-  //   onError: (e) => {}
-  // });
+  const [selected, setSelected] = useState({} as any)
+  const registredAs = register(name, {required})
+
+  const {errors, touchedFields} = formState
+  const formErrors = (errors && errors[name])
+  const touched = touchedFields && touchedFields[name]
+
+  const isRelation = name.endsWith('Id')
+  const storedDataName = isRelation ? name.substr(0, name.length-2) : name
+
+  const { data, loading, error } = useQuery(QUERY, {
+    variables:{filter},
+    onError: (e) => {}
+  });
+
+  const sortedData = useMemo(()=>{
+    if(data) {
+      const unsortedData = getDataFromRaw(data)
+      const mappedData = unsortedData.map((d:any)=>(map ? {id: d.id, name: map(d)} : d))
+      return mappedData.sort((r1:any,r2:any)=>(r1.name<r2.name))
+    } 
+  }, [data])
+
+  useEffect(()=>{
+    if(storedData && storedData[storedDataName] && sortedData){
+      let storedId: string
+      
+      if(isRelation) storedId = _.get(storedData, [storedDataName, 'id'])
+      else storedId = storedData[storedDataName]
+
+      setValue(name, storedId)
+
+      const obj = sortedData.find((sd:any)=>sd.id === storedId)
+      setSelected({id: storedId, name:obj.name})
+    } 
+  },[storedData, sortedData])
+
+  const onSelect:SelectCallback = (eventKey) => {
+    const obj = sortedData.find((sd:any)=>sd.id === eventKey)
+    setSelected({id: eventKey, name:obj.name})
+    setValue(name, eventKey, {
+      shouldValidate: true
+    })
+  }
 
   return(
     <Dropdown>
-      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" >
-        Custom toggle
+      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" isInvalid={formErrors} isValid={touched && !error} >
+        {selected && selected.name ? selected.name : (placeholder || 'Select by click')} {required && '*'}
       </Dropdown.Toggle>
   
-      <Dropdown.Menu as={CustomMenu} >
-        <Dropdown.Item eventKey="1">Red</Dropdown.Item>
-        <Dropdown.Item eventKey="2">Blue</Dropdown.Item>
-        <Dropdown.Item eventKey="3" >
-          Orange
-        </Dropdown.Item>
-        <Dropdown.Item eventKey="1">Red-Orange</Dropdown.Item>
+      <Dropdown.Menu as={CustomMenu}>
+        {sortedData && sortedData.map(((rd:any)=>(<Dropdown.Item key={`dropdown/${name}/${rd.name}`} eventKey={rd.id} onSelect={onSelect} >{rd.name}</Dropdown.Item>)))}
       </Dropdown.Menu>
     </Dropdown>
   );
