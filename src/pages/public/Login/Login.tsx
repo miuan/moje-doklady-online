@@ -1,13 +1,10 @@
-import React, { useState, useContext } from 'react'
-import gql from 'graphql-tag'
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom'
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client'
-import { User, useUserDispatch, USER_LOGIN } from '../../../app/userContext'
-import { Modal, Form, Button, Alert } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Form, Button, Alert } from 'react-bootstrap'
 import { isEmailValid } from './utils/utils'
-import { getGraphqlMonsterClientAppRoot } from '../../../app/utils'
-import { useAppDispatch } from '../../../app/hooks'
-import { login } from '../../../app/reducers/userSlice'
+import { getGraphqlMonsterClientAppRoot } from '../../../features/utils'
+import { useAppDispatch } from '../../../features/hooks'
+import { login } from '../../../features/user/userSlice'
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch()

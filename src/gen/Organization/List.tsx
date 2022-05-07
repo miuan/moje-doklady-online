@@ -1,49 +1,50 @@
-import React from "react";
-import { loader } from "graphql.macro";
+import React from 'react'
+import { loader } from 'graphql.macro'
 
-import FilteredList from "../../components/List/FilteredList";
-import { useUserState } from "../../app/userContext";
-
-
+import FilteredList from '../../components/List/FilteredList'
+import { useUserState } from '../../features/userContext'
 
 export const USER_LIST_QUERY = loader('./graphql/all.gql')
 export const DELETE_MUTATION = loader('./graphql/delete.gql')
 export const ADMIN_LIST_QUERY = USER_LIST_QUERY
 
-export const FIELDS = [{name: 'name', title:'Name'},
-{name: 'street', title:'Street'},
-{name: 'zip', title:'Zip'},
-{name: 'city', title:'City'},
-{name: 'country', title:'Country'},
-{name: 'ico', title:'Ico'},
-{name: 'dic', title:'Dic'},
-{name: 'phone', title:'Phone'},
-{name: 'www', title:'Www'},
-{name: 'type', title:'Type'}]
-
+export const FIELDS = [
+  { name: 'name', title: 'Name' },
+  { name: 'street', title: 'Street' },
+  { name: 'zip', title: 'Zip' },
+  { name: 'city', title: 'City' },
+  { name: 'country', title: 'Country' },
+  { name: 'ico', title: 'Ico' },
+  { name: 'dic', title: 'Dic' },
+  { name: 'phone', title: 'Phone' },
+  { name: 'www', title: 'Www' },
+  { name: 'type', title: 'Type' },
+]
 
 export type OrganizationListType = {
-  adminMode?: boolean, 
-  name?: string, 
+  adminMode?: boolean
+  name?: string
   fields?: any
-  allQuery?: any,
-  adminQuery?: any,
+  allQuery?: any
+  adminQuery?: any
   deleteMutation?: any
 }
 
-export const OrganizationList: React.FC<OrganizationListType> = ({adminMode=false, name, fields, allQuery, adminQuery, deleteMutation}) => {
+export const OrganizationList: React.FC<OrganizationListType> = ({ adminMode = false, name, fields, allQuery, adminQuery, deleteMutation }) => {
   const user = useUserState()
   return (
     <div className={`filtered-list-Organization filtered-list`}>
-      <FilteredList 
-              name={name || 'Organizations'}
-              fields={fields || FIELDS}
-              userId={user?.id} 
-              adminMode={adminMode}
-              queries={{
-                USER_LIST_QUERY:allQuery || USER_LIST_QUERY, 
-                ADMIN_LIST_QUERY:adminQuery || ADMIN_LIST_QUERY, 
-                DELETE_MUTATION: deleteMutation || DELETE_MUTATION}} />
+      <FilteredList
+        name={name || 'Organizations'}
+        fields={fields || FIELDS}
+        userId={user?.id}
+        adminMode={adminMode}
+        queries={{
+          USER_LIST_QUERY: allQuery || USER_LIST_QUERY,
+          ADMIN_LIST_QUERY: adminQuery || ADMIN_LIST_QUERY,
+          DELETE_MUTATION: deleteMutation || DELETE_MUTATION,
+        }}
+      />
     </div>
   )
 }

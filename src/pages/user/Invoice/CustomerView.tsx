@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Form } from 'react-bootstrap'
 
-import { useUserState } from '../../../app/userContext'
+import { useUserState } from '../../../features/userContext'
 import { USER_LIST_QUERY } from '../../../gen/Customer/List'
 
 export type CustomerViewType = {

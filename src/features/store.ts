@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import userReducer from './reducers/userSlice'
+import userReducer from './user/userSlice'
 import counterReducer from '../features/counter/counterSlice'
 import organizationReducer from './reducers/organizationReducer'
 import apolloClient from './apolloClient'

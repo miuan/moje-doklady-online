@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { loader } from 'graphql.macro'
 import { User } from '../userContext'
-export const LOGIN_QL = loader('../graphql/login.gql')
-export const REGISTER_MUTATION = loader('../graphql/register.gql')
-export const FORGOTTEN_PASSWORD_RESET_MUTATION = loader('../graphql/forgotten-password-reset.gql')
+export const LOGIN_QL = loader('./graphql/login.gql')
+export const REGISTER_MUTATION = loader('./graphql/register.gql')
+export const FORGOTTEN_PASSWORD_RESET_MUTATION = loader('./graphql/forgotten-password-reset.gql')
 
 export const STATES = {
   NONE: 'NONE',

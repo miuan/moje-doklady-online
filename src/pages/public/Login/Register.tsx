@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
-import { useAppDispatch } from '../../../app/hooks'
-import { register } from '../../../app/reducers/userSlice'
-import { isEmailValid, passwordStrong } from '../../../app/utils'
+import { useAppDispatch } from '../../../features/hooks'
+import { register } from '../../../features/user/userSlice'
+import { isEmailValid, passwordStrong } from '../../../features/utils'
 import PasswordComponent from './PasswordComponent'
 
 export const Register = () => {
