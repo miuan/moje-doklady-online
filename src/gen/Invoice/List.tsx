@@ -3,6 +3,8 @@ import { loader } from 'graphql.macro'
 
 import FilteredList from '../../components/List/FilteredList'
 import { useUserState } from '../../features/userContext'
+import { useSelector } from 'react-redux'
+import { activeUserId } from '../../features/user/userSlice'
 
 export const USER_LIST_QUERY = loader('./graphql/all.gql')
 export const DELETE_MUTATION = loader('./graphql/delete.gql')
@@ -20,20 +22,22 @@ export type InvoiceListType = {
 }
 
 export const InvoiceList: React.FC<InvoiceListType> = ({ adminMode = false, name, fields, allQuery, adminQuery, deleteMutation }) => {
-  const user = useUserState()
+  const userId = useSelector(activeUserId)
   return (
     <div className={`filtered-list-Invoice filtered-list`}>
-      <FilteredList
-        name={name || 'Invoices'}
-        fields={fields || FIELDS}
-        userId={user?.id}
-        adminMode={adminMode}
-        queries={{
-          USER_LIST_QUERY: allQuery || USER_LIST_QUERY,
-          ADMIN_LIST_QUERY: adminQuery || ADMIN_LIST_QUERY,
-          DELETE_MUTATION: deleteMutation || DELETE_MUTATION,
-        }}
-      />
+      {userId && (
+        <FilteredList
+          name={name || 'Invoices'}
+          fields={fields || FIELDS}
+          userId={userId}
+          adminMode={adminMode}
+          queries={{
+            USER_LIST_QUERY: allQuery || USER_LIST_QUERY,
+            ADMIN_LIST_QUERY: adminQuery || ADMIN_LIST_QUERY,
+            DELETE_MUTATION: deleteMutation || DELETE_MUTATION,
+          }}
+        />
+      )}
     </div>
   )
 }

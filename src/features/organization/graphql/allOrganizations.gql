@@ -3,4 +3,9 @@ query allOrganizations($filter: OrganizationFilter){
   allOrganization(filter: $filter) {
     id
     name,
+    street,
+    city,
+    zip,
+    ico,
+    dic
   }}

@@ -15,7 +15,7 @@ export const Header = () => {
   }
 
   if (user && user.token) {
-    if (user.roles.find((r: any) => r.name === 'admin')) return <AdminHeader user={user} onLogout={onLogout} />
+    if (user.roles?.find((r: any) => r.name === 'admin')) return <AdminHeader user={user} onLogout={onLogout} />
     else return <UserHeader user={user} onLogout={onLogout} />
   }
 

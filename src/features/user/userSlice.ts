@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { loader } from 'graphql.macro'
+import { RootState } from '../store'
 import { User } from '../userContext'
 export const LOGIN_QL = loader('./graphql/login.gql')
 export const REGISTER_MUTATION = loader('./graphql/register.gql')
@@ -127,7 +128,8 @@ export const userSlice = createSlice({
   },
 })
 
-export const selectUser = (state: any) => state?.user?.user
+export const selectUser = (state: RootState) => state?.user?.user
+export const activeUserId = (state: RootState) => selectUser(state)?.id
 // Action creators are generated for each case reducer function
 export const { logout, changeState } = userSlice.actions
 

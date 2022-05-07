@@ -1,30 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Nav from 'react-bootstrap/Nav'
 import Badge from 'react-bootstrap/Badge'
 import DropdownItem from 'react-bootstrap/esm/DropdownItem'
 import { useQuery } from '@apollo/client'
-import { loader } from 'graphql.macro'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../../features/store'
-
-export const ALL_ORGANIZATION_QUERY = loader('./graphql/allOrganizations.gql')
+import { useAppDispatch } from '../../../features/hooks'
+import { loadAll, organizationsAll } from '../../../features/organization/organizationReducer'
 
 const UserHeader = ({ user, onLogout }: any) => {
-  const selected = useSelector((state: RootState) => state.organization.selected)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const orgs = useSelector(organizationsAll)
 
-  const [orgs, setOrgs] = useState<{ id: string; name: string }[]>([])
-  const { refetch: userRefetch, loading: userLoading } = useQuery(ALL_ORGANIZATION_QUERY, {
-    onError: (e) => {},
-    onCompleted: (raw) => {
-      const data = raw[Object.keys(raw)[0]]
-      setOrgs(data)
-    },
-    variables: { filter: { AND: [{ user_every: { id: user.id } }] } },
-  })
+  useEffect(() => {
+    dispatch(loadAll())
+  }, [dispatch])
 
   return (
     <div className="header-light transparent scroll-light container">
@@ -51,7 +44,7 @@ const UserHeader = ({ user, onLogout }: any) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              {orgs.map((org) => (
+              {orgs.map((org: any) => (
                 <Dropdown.Item>
                   {org.name}{' '}
                   <Link className="" to={`/user/organizations/${org.id}`}>

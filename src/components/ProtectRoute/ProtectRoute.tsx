@@ -6,7 +6,7 @@ import { selectUser } from '../../features/user/userSlice'
 export const ProtectRoute = ({ path, role, exact, children }: any) => {
   const user = useSelector(selectUser)
 
-  if (role && !user?.roles.find((r: any) => r.name === role)) {
+  if (role && !user?.roles?.find((r: any) => r.name === role)) {
     return <Redirect to={`/login?path=${path}&role=${role}`} />
   }
 

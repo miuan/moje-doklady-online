@@ -1,14 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import userReducer from './user/userSlice'
 import counterReducer from '../features/counter/counterSlice'
-import organizationReducer from './reducers/organizationReducer'
+import organizationReducer from './organization/organizationReducer'
 import apolloClient from './apolloClient'
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     user: userReducer,
-    organization: organizationReducer,
+    organizations: organizationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
