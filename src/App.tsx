@@ -1,28 +1,28 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { ApolloProvider } from "@apollo/client";
+import React, { useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { ApolloProvider } from '@apollo/client'
 
-import Register from "./containers/public/Login/Register";
-import Login from "./containers/public/Login/Login";
-import ForgottenPassword from "./containers/public/Login/ForgottenPassword";
-import ForgottenPasswordReset from "./containers/public/Login/ForgottenPasswordReset";
-import VerifyUser from "./containers/public/Login/VerifyUser";
-import { GithubCallback } from "./containers/public/Login/utils/GithubCallback";
+import Register from './pages/public/Login/Register'
+import Login from './pages/public/Login/Login'
+import ForgottenPassword from './pages/public/Login/ForgottenPassword'
+import ForgottenPasswordReset from './pages/public/Login/ForgottenPasswordReset'
+import VerifyUser from './pages/public/Login/VerifyUser'
+import { GithubCallback } from './pages/public/Login/utils/GithubCallback'
 
-import Home from "./containers/public/Home/Home";
-import Header from "./components/Header/Header";
-import UserDashboard from "./containers/user/UserDashboard/UserDashboard";
-import ProtectRoute from "./components/ProtectRoute/ProtectRoute";
-import UsersList from "./containers/admin/Users/UsersList";
-import UserRolesList from "./containers/admin/UserRoles/UserRolesList";
-import OrganizationList from "./gen/Organization/List";
-import OrganizationEdit from "./gen/Organization/Edit";
-import CustomerList from "./gen/Customer/List";
-import CustomerEdit from "./gen/Customer/Edit";
-import InvoiceList from "./gen/Invoice/List";
-import InvoiceEdit from "./containers/user/Invoice/InvoiceEdit";
+import Home from './pages/public/Home/Home'
+import Header from './components/Header/Header'
+import UserDashboard from './pages/user/UserDashboard/UserDashboard'
+import ProtectRoute from './components/ProtectRoute/ProtectRoute'
+import UsersList from './pages/admin/Users/UsersList'
+import UserRolesList from './pages/admin/UserRoles/UserRolesList'
+import OrganizationList from './gen/Organization/List'
+import OrganizationEdit from './gen/Organization/Edit'
+import CustomerList from './gen/Customer/List'
+import CustomerEdit from './gen/Customer/Edit'
+import InvoiceList from './gen/Invoice/List'
+import InvoiceEdit from './pages/user/Invoice/InvoiceEdit'
 
-import "./App.css";
+import './App.css'
 
 export default function App() {
   return (
@@ -44,22 +44,19 @@ export default function App() {
             <Login />
           </Route>
           <Route path="/login/facebook">
-            <GithubCallback type={"facebook"} />
+            <GithubCallback type={'facebook'} />
           </Route>
           <Route path="/login/github">
-            <GithubCallback type={"github"} />
+            <GithubCallback type={'github'} />
           </Route>
           <Route path="/login/google">
-            <GithubCallback type={"google"} />
+            <GithubCallback type={'google'} />
           </Route>
           <Route path="/register">
             <Register />
           </Route>
 
-          <Route
-            path="/forgotten-password/:token"
-            component={ForgottenPasswordReset}
-          />
+          <Route path="/forgotten-password/:token" component={ForgottenPasswordReset} />
           <Route exact path="/forgotten-password">
             <ForgottenPassword />
           </Route>
@@ -69,39 +66,21 @@ export default function App() {
           <ProtectRoute path="/user/dashboard">
             <UserDashboard />
           </ProtectRoute>
-          <ProtectRoute
-            exact
-            path="/user/organizations"
-            children={<OrganizationList />}
-          />
-          <ProtectRoute
-            path="/user/organizations/:id"
-            children={<OrganizationEdit />}
-          />
+          <ProtectRoute exact path="/user/organizations" children={<OrganizationList />} />
+          <ProtectRoute path="/user/organizations/:id" children={<OrganizationEdit />} />
 
-          <ProtectRoute
-            exact
-            path="/user/customers"
-            children={<CustomerList />}
-          />
-          <ProtectRoute
-            path="/user/customers/:id"
-            children={<CustomerEdit />}
-          />
+          <ProtectRoute exact path="/user/customers" children={<CustomerList />} />
+          <ProtectRoute path="/user/customers/:id" children={<CustomerEdit />} />
 
-          <ProtectRoute
-            exact
-            path="/user/invoices"
-            children={<InvoiceList />}
-          />
+          <ProtectRoute exact path="/user/invoices" children={<InvoiceList />} />
           <ProtectRoute path="/user/invoices/:id" children={<InvoiceEdit />} />
 
           <Route path="/user/info">{/* <UserInfo /> */}</Route>
 
-          <ProtectRoute path="/admin/users" role={"admin"}>
+          <ProtectRoute path="/admin/users" role={'admin'}>
             <UsersList adminMode={true} />
           </ProtectRoute>
-          <ProtectRoute path="/admin/roles" role={"admin"}>
+          <ProtectRoute path="/admin/roles" role={'admin'}>
             <UserRolesList adminMode={true} />
           </ProtectRoute>
           {/*              
@@ -110,7 +89,7 @@ export default function App() {
         </Switch>
       </div>
     </Router>
-  );
+  )
 }
 
 // You can think of these components as "pages"
@@ -121,5 +100,5 @@ function About() {
     <div>
       <h2>About</h2>
     </div>
-  );
+  )
 }
