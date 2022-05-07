@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button, Form, Modal, Table, Card } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { activeUserId } from '../../../features/user/userSlice'
@@ -10,9 +10,10 @@ import EntityCard from './EntityCard'
 
 export type CustomerViewType = {
   onCustomerSelect: (id: number) => void
+  selectedCustomerId?: number
 }
 
-export const CustomerView: (obj: CustomerViewType) => any = ({ onCustomerSelect }) => {
+export const CustomerView: (obj: CustomerViewType) => any = ({ onCustomerSelect, selectedCustomerId }) => {
   const userId = useSelector(activeUserId)
   const [showSelectCustomer, setShowSelectCustomer] = useState(false)
   const [customer, selectCustomer] = useState<any>(false)
@@ -22,10 +23,18 @@ export const CustomerView: (obj: CustomerViewType) => any = ({ onCustomerSelect 
   const onSelectCustomer = useCallback(
     (item: any) => {
       setShowSelectCustomer(false)
-      selectCustomer(item)
+      onCustomerSelect(item.id)
+      //selectCustomer(item)
     },
-    [setShowSelectCustomer, selectCustomer],
+    [setShowSelectCustomer, onCustomerSelect],
   )
+
+  useEffect(() => {
+    if (data?.allCustomer?.length > 0 && selectedCustomerId) {
+      const customer = data.allCustomer.find((customer: any) => customer.id === selectedCustomerId)
+      selectCustomer(customer)
+    }
+  }, [data, selectedCustomerId, selectCustomer])
 
   return (
     <div className={`base-view-Customer base-view`}>
@@ -45,7 +54,6 @@ export const CustomerView: (obj: CustomerViewType) => any = ({ onCustomerSelect 
               <td>
                 {customer.city}, {customer.street}, {customer.zip}{' '}
               </td>
-
               <td>{customer.ico}</td>
             </>
           ),
