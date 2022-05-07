@@ -1,6 +1,6 @@
 
 query allOrganizations($filter: OrganizationFilter){ 
-  allOrganizations(filter: $filter) {
+  allOrganization(filter: $filter) {
     id
     name,
   }}

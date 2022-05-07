@@ -1,6 +1,6 @@
 #import "./fragment.gql"
 
-query allOrganizations($filter: OrganizationFilter){ 
-  allOrganizations(filter: $filter) {
+query allOrganization($filter: OrganizationFilter){ 
+  allOrganization(filter: $filter) {
     ...OrganizationFragment
   }}

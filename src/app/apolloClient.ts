@@ -1,131 +1,124 @@
-import { ApolloClient, InMemoryCache , createHttpLink,  ApolloLink, fromPromise } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { onError } from '@apollo/client/link/error';
-import { refreshToken } from './refreshToken';
-import { RetryLink } from "@apollo/client/link/retry";
+import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, fromPromise } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
+import { refreshToken } from './refreshToken'
+import { RetryLink } from '@apollo/client/link/retry'
 
 const retryLink = new RetryLink({
   attempts: (count, operation, error) => {
-    // TODO: Attept only if is network error
-    return false;
+    return true
   },
   delay: (count, operation, error) => {
-    return count * 2000;
+    return count * 1000 * Math.random()
   },
-});
+})
 
-let isRefreshing = false;
-let pendingRequests:any = [];
+let isRefreshing = false
+let pendingRequests: any[] = []
 
 const resolvePendingRequests = () => {
   //@ts-ignore
-  pendingRequests.map(callback => callback());
-  pendingRequests = [];
+  pendingRequests.map((callback) => callback())
+  pendingRequests = []
 }
 
 // https://able.bio/AnasT/apollo-graphql-async-access-token-refresh--470t1c8
-const unautheniticatedAction = (forward:any, operation:any) => {
+const refreshTokenAction = (forward: any, operation: any) => {
   // error code is set to UNAUTHENTICATED
   // when AuthenticationError thrown in resolver
-  let forward$;
+  let forward$
 
   if (!isRefreshing) {
-    isRefreshing = true;
+    isRefreshing = true
     forward$ = fromPromise(
       refreshToken()
         // @ts-ignore
-        .then(({data}) => {
-          const {data: {refreshToken_v1}} = data
+        .then(({ data }) => {
+          const {
+            data: { refreshToken_v1 },
+          } = data
           localStorage.setItem('user.token', refreshToken_v1.token)
           localStorage.setItem('user.refreshToken', refreshToken_v1.refreshToken)
-          
+
           // Store the new tokens for your auth link
-          resolvePendingRequests();
-          const oldHeaders = operation.getContext().headers;
+          resolvePendingRequests()
+          const oldHeaders = operation.getContext().headers
           // modify the operation context with a new token
           operation.setContext({
             headers: {
               ...oldHeaders,
               authorization: `Bearer ${refreshToken_v1.token}`,
             },
-          });
+          })
           return forward(operation)
         })
-        .catch(error => {
-          pendingRequests = [];
+        .catch((error) => {
+          pendingRequests = []
           // Handle token refresh errors e.g clear stored tokens, redirect to login, ...
-          return;
+          return
         })
         .finally(() => {
-          isRefreshing = false;
-        })
-    ).filter(value => Boolean(value))
-    
+          isRefreshing = false
+        }),
+    ).filter((value) => Boolean(value))
   } else {
     // Will only emit once the Promise is resolved
     forward$ = fromPromise(
-      new Promise(resolve => {
+      new Promise((resolve) => {
         // @ts-ignore
-        pendingRequests.push(() => resolve());
-      })
-    );
+        pendingRequests.push(() => resolve())
+      }),
+    )
   }
 
   // @ts-ignore
   return forward$.flatMap(() => {
     return forward(operation)
-  });
+  })
 }
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('user.token');
+  const token = localStorage.getItem('user.token')
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    }
+      authorization: token ? `Bearer ${token}` : '',
+    },
   }
-});
+})
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_HOST
-  //uri: 'http://protectql.com/graphql',
+  uri: process.env.REACT_APP_HOST,
 })
 
 // @ts-ignore
 const erroLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
-
-    if(graphQLErrors && graphQLErrors?.length > 0 && graphQLErrors[0].message == 'Unauthorized') {
-      // @ts-ignore
-      return unautheniticatedAction(forward, operation)
+  if (graphQLErrors) {
+    if (graphQLErrors.some((error: any) => error.tokenExpired)) {
+      return refreshTokenAction(forward, operation)
     }
+    graphQLErrors.map(({ message, locations, path }) => console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`))
+  }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`);
-});
+  if (networkError) console.log(`[Network error]: ${networkError}`)
+})
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([retryLink, erroLink, authLink, httpLink]),
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
-      errorPolicy: 'none'
+      errorPolicy: 'none',
     },
     query: {
-      errorPolicy: 'none'
+      errorPolicy: 'none',
     },
     mutate: {
-      errorPolicy: 'all'
-    }
-  }
-});
-
+      errorPolicy: 'all',
+    },
+  },
+})
 
 export default apolloClient

@@ -1,6 +1,6 @@
 #import "./fragment.gql"
 
 query allCustomers($filter: CustomerFilter){ 
-  allCustomers(filter: $filter) {
+  allCustomer(filter: $filter) {
     ...CustomerFragment
   }}

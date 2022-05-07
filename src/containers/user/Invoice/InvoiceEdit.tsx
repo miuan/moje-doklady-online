@@ -2,12 +2,11 @@ import React from 'react'
 import { loader } from 'graphql.macro'
 import { useParams } from 'react-router-dom'
 import * as _ from 'lodash'
+import { CustomerView } from './CustomerView'
 
-import BaseEdit from '../../components/Editor/Edit'
-
-export const CREATE_MUTATION = loader('./graphql/create.gql')
-export const UPDATE_MUTATION = loader('./graphql/update.gql')
-export const ONE_QUERY = loader('./graphql/one.gql')
+export const CREATE_MUTATION = loader('../../../gen/Invoice/graphql/create.gql')
+export const UPDATE_MUTATION = loader('../../../gen/Invoice/graphql/update.gql')
+export const ONE_QUERY = loader('../../../gen/Invoice/graphql/one.gql')
 
 export const FIELDS = [{ name: 'name', label: 'Name', required: true }]
 
@@ -26,16 +25,7 @@ export const InvoiceEdit: (obj: InvoiceEditType) => any = ({ name, fields, creat
 
   return (
     <div className={`base-edit-Invoice base-edit`}>
-      <BaseEdit
-        id={id}
-        name={name || 'Invoices'}
-        fields={fields || FIELDS}
-        query={{
-          CREATE_MUTATION: createMutation || CREATE_MUTATION,
-          UPDATE_MUTATION: updateMutation || UPDATE_MUTATION,
-          QUERY: oneQuery || ONE_QUERY,
-        }}
-      />
+      <CustomerView onCustomerSelect={() => {}} />
     </div>
   )
 }

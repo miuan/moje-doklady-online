@@ -1,6 +1,6 @@
 #import "./fragment.gql"
 
-mutation createCustomer($name: String!, $street: String!, $zip: String!, $city: String!, $country: String!, $ico: String!, $dic: String, $phone: String, $www: String, $invoicesIds: [ID!], $invoices: [CustomerinvoicesInvoice!], $userId: ID!) {
+mutation createCustomer($name: String!, $street: String!, $zip: String!, $city: String!, $country: String!, $ico: String!, $dic: String, $phone: String, $www: String, $invoicesIds: [ID!], $invoices: [InCustomerMemberInvoicesAsInvoice!], $userId: ID!) {
     createCustomer(
       name: $name, street: $street, zip: $zip, city: $city, country: $country, ico: $ico, dic: $dic, phone: $phone, www: $www, invoicesIds: $invoicesIds, invoices: $invoices, userId: $userId
       ) {
