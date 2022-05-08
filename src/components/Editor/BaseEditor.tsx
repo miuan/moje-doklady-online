@@ -111,7 +111,7 @@ export const BaseEditor = ({ name, form, externId, renameError, onUpdated, updat
     return <Loading what={name} />
   }
 
-  return <div>{children(storedData, onSubmit, errors, submitting, submittingDone)}</div>
+  return <>{children(storedData, onSubmit, errors, submitting, submittingDone)}</>
 }
 
 export default BaseEditor

@@ -24,7 +24,7 @@ export const CustomerView: (obj: CustomerViewType) => any = ({ onCustomerSelect,
     (item: any) => {
       setShowSelectCustomer(false)
       onCustomerSelect(item.id)
-      //selectCustomer(item)
+      selectCustomer(item)
     },
     [setShowSelectCustomer, onCustomerSelect],
   )
